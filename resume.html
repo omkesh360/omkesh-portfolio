@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omkesh Narwade - Resume</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #2a2a2a;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-muted: #666666;
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-hover: rgba(255, 255, 255, 0.1);
+            --shadow-light: rgba(255, 255, 255, 0.1);
+            --shadow-dark: rgba(0, 0, 0, 0.3);
+            --blur-amount: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .resume-header {
+            text-align: center;
+            padding: 4rem 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur-amount));
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .resume-header h1 {
+            font-size: 3rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .resume-header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .contact-item i {
+            color: var(--accent-primary);
+        }
+
+        .resume-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur-amount));
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--accent-primary);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: var(--accent-gradient);
+        }
+
+        .resume-item {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .resume-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .item-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .item-subtitle {
+            color: var(--accent-secondary);
+            font-weight: 500;
+        }
+
+        .item-date {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            background: var(--bg-tertiary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+        }
+
+        .item-description {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-category h4 {
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-tag {
+            background: var(--accent-gradient);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur-amount));
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 1rem 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: var(--glass-hover);
+            transform: translateY(-2px);
+        }
+
+        .download-btn {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-weight: 600;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .resume-header h1 {
+                font-size: 2rem;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .item-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .back-btn, .download-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                right: auto;
+                margin: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        Back to Portfolio
+    </a>
+    
+    <a href="resume.pdf" target="_blank" class="download-btn">
+        <i class="fas fa-download"></i>
+        Download PDF
+    </a>
+
+    <div class="container">
+        <div class="resume-header" data-aos="fade-up">
+            <h1>Omkesh Narwade</h1>
+            <p>Electronics & Computer Engineering Student</p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>omkeshnarwade9@outlook.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+91 8830 148125</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Nanded & Aurangabad, India</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="resume-section" data-aos="fade-up" data-aos-delay="100">
+            <h2 class="section-title">
+                <i class="fas fa-user"></i>
+                Professional Summary
+            </h2>
+            <p class="item-description">
+                Passionate Electronics & Computer Engineering student at MIT Aurangabad with a strong foundation in technology and innovation. 
+                Driven by curiosity and a desire to build innovative solutions that bring real change. Experienced in software development, 
+                hardware systems, and creative problem-solving. Continuously learning new technologies and earning certifications to stay 
+                current with industry trends.
+            </p>
+        </div>
+
+        <div class="resume-section" data-aos="fade-up" data-aos-delay="200">
+            <h2 class="section-title">
+                <i class="fas fa-graduation-cap"></i>
+                Education
+            </h2>
+            <div class="resume-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title">Bachelor of Technology - BTech</div>
+                        <div class="item-subtitle">Maharashtra Institute of Technology Aurangabad</div>
+                    </div>
+                    <div class="item-date">01/2021 – 12/2026</div>
+                </div>
+                <div class="item-description">Electronics and Computer Engineering</div>
+            </div>
+            <div class="resume-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title">Higher Secondary Certificate (HSC)</div>
+                        <div class="item-subtitle">Cambridge Junior College Nanded</div>
+                    </div>
+                    <div class="item-date">Completed</div>
+                </div>
+                <div class="item-description">Physics, Chemistry, Mathematics (PCM)</div>
+            </div>
+        </div>
+
+        <div class="resume-section" data-aos="fade-up" data-aos-delay="300">
+            <h2 class="section-title">
+                <i class="fas fa-briefcase"></i>
+                Experience
+            </h2>
+            <div class="resume-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title">Young Influencer</div>
+                        <div class="item-subtitle">Unschool</div>
+                    </div>
+                    <div class="item-date">10/2023 – 11/2023</div>
+                </div>
+                <div class="item-description">
+                    Worked as a young influencer, contributing to educational content and community engagement initiatives. 
+                    Developed content strategies and engaged with educational communities to promote learning and skill development.
+                </div>
+            </div>
+        </div>
+
+        <div class="resume-section" data-aos="fade-up" data-aos-delay="400">
+            <h2 class="section-title">
+                <i class="fas fa-cogs"></i>
+                Technical Skills
+            </h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h4>Programming Languages</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">C++</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">HTML/CSS</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h4>Technologies</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Google Cloud Platform</span>
+                        <span class="skill-tag">Machine Learning</span>
+                        <span class="skill-tag">Data Science</span>
+                        <span class="skill-tag">Web Development</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h4>Tools & Software</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Adobe Photoshop</span>
+                        <span class="skill-tag">Microsoft Excel</span>
+                        <span class="skill-tag">Git</span>
+                        <span class="skill-tag">VS Code</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h4>Languages</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">English (Professional)</span>
+                        <span class="skill-tag">Hindi (Native)</span>
+                        <span class="skill-tag">Marathi (Native)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="resume-section" data-aos="fade-up" data-aos-delay="500">
+            <h2 class="section-title">
+                <i class="fas fa-certificate"></i>
+                Key Certifications
+            </h2>
+            <div class="resume-item">
+                <div class="item-title">Google Cloud Platform Certifications</div>
+                <div class="item-description">
+                    • Digital Transformation with Google Cloud<br>
+                    • Infrastructure and Application Modernization<br>
+                    • Introduction to Generative AI<br>
+                    • Introduction to Large Language Models
+                </div>
+            </div>
+            <div class="resume-item">
+                <div class="item-title">Programming & Development</div>
+                <div class="item-description">
+                    • Object Oriented Programming in C++<br>
+                    • Introduction to Programming Using Python<br>
+                    • Data Science with Python
+                </div>
+            </div>
+            <div class="resume-item">
+                <div class="item-title">Professional Skills</div>
+                <div class="item-description">
+                    • TCS iON Career Edge - Young Professional<br>
+                    • Communication Skills<br>
+                    • The Fundamentals of Digital Marketing<br>
+                    • Adobe Photoshop (Beginner to Advanced)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+        });
+    </script>
+</body>
+</html>

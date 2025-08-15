@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificates & Achievements - Omkesh Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/skills-animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .certificates-page {
+            padding: 120px 0 80px;
+            min-height: 100vh;
+        }
+        
+        .certificates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .certificate-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .certificate-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .certificate-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .certificate-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .certificate-icon i {
+            color: white !important;
+        }
+        
+        .certificate-provider {
+            flex: 1;
+        }
+        
+        .provider-name {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        
+        .certificate-date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .certificate-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+        
+        .certificate-details {
+            margin-bottom: 1.5rem;
+        }
+        
+        .credential-id {
+            background: rgba(var(--primary-color-rgb, 102, 126, 234), 0.1);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .certificate-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .skill-tag {
+            background: rgba(var(--accent-color-rgb, 255, 107, 107), 0.2);
+            color: var(--accent-color, #ff6b6b);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .certificate-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn-credential {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-credential:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .languages-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .languages-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .language-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .language-flag {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--glass-border);
+        }
+        
+        .language-flag img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .language-info {
+            flex: 1;
+        }
+        
+        .language-name {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .language-proficiency {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .certificates-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .languages-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            
+            @media (max-width: 480px) {
+                .languages-grid {
+                    grid-template-columns: 1fr;
+                    gap: 1rem;
+                }
+            }
+            
+            .language-item {
+                justify-content: center;
+                min-width: auto;
+            }
+        }
+        
+        /* Contact Form Styles */
+        .contact-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .contact-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-group label {
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 1rem;
+            color: var(--text-color);
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            justify-self: start;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Hide credential IDs and buttons */
+        .credential-id,
+        .certificate-actions {
+            display: none !important;
+        }
+
+        /* Change certificate icons to white */
+        .certificate-icon {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa) !important;
+            color: #333 !important;
+        }
+
+        .certificate-icon i {
+            color: #333 !important;
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <div class="boxed-layout">
+        <!-- Background Elements -->
+        <div class="bg-gradient"></div>
+        <div class="particles-container" id="particlesContainer"></div>
+        
+        <!-- Animated Stars Background -->
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div id="stars3"></div>
+        <div id="stars4"></div>
+        <div id="stars5"></div>
+
+        <!-- Header -->
+        <header class="glass-header">
+            <nav class="container">
+                <div class="nav-brand">
+                    <img src="assets/images/logo.png" alt="Omkesh Narwade" style="width: 80px; height: 80px; object-fit: contain;">
+                </div>
+
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html#home" class="nav-link">Home</a></li>
+                    <li><a href="index.html#about" class="nav-link">About</a></li>
+                    <li><a href="index.html#education" class="nav-link">Education</a></li>
+                    <li><a href="index.html#projects" class="nav-link">Projects</a></li>
+                    <li><a href="skills.html" class="nav-link">Skills</a></li>
+                    <li><a href="certificates.html" class="nav-link active">Certificates</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                </ul>
+
+                <div class="nav-controls">
+                    <a href="index.html#contact" class="cta-btn glass-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Contact
+                    </a>
+                    <a href="resume.html" class="resume-btn glass-btn">
+                        <i class="fas fa-file-alt"></i>
+                        Resume
+                    </a>
+                    <button class="mobile-menu-toggle" id="mobileToggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </nav>
+        </header>
+
+        <main class="certificates-page">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="section-title">Licenses & Certifications</h1>
+                    <p class="section-subtitle">Professional certifications and learning achievements</p>
+                </div>
+
+                <!-- Languages Section -->
+                <div class="languages-section">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1.5rem; text-align: center;">Languages I Speak</h3>
+                    <div class="languages-grid">
+                        <div class="language-item">
+                            <div class="language-flag">
+                                <img src="https://flagcdn.com/w80/us.png" alt="English Flag">
+                            </div>
+                            <div class="language-info">
+                                <div class="language-name">English</div>
+                                <div class="language-proficiency">90%</div>
+                            </div>
+                        </div>
+                        <div class="language-item">
+                            <div class="language-flag">
+                                <img src="https://flagcdn.com/w80/in.png" alt="Hindi Flag">
+                            </div>
+                            <div class="language-info">
+                                <div class="language-name">Hindi</div>
+                                <div class="language-proficiency">100%</div>
+                            </div>
+                        </div>
+                        <div class="language-item">
+                            <div class="language-flag">
+                                <img src="https://flagcdn.com/w80/in.png" alt="Marathi Flag">
+                            </div>
+                            <div class="language-info">
+                                <div class="language-name">Marathi</div>
+                                <div class="language-proficiency">100%</div>
+                            </div>
+                        </div>
+                        <div class="language-item">
+                            <div class="language-flag">
+                                <img src="https://flagcdn.com/w80/jp.png" alt="Japanese Flag">
+                            </div>
+                            <div class="language-info">
+                                <div class="language-name">Japanese</div>
+                                <div class="language-proficiency">15%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certificates Grid -->
+                <div class="certificates-grid">
+                    <!-- Google Cloud Certificates -->
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fab fa-google" style="color: #4285f4;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">Coursera</div>
+                                <div class="certificate-date">Issued Dec 2023</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">Digital Transformation with Google Cloud</h3>
+                        <div class="certificate-skills">
+                            <span class="skill-tag">Google Cloud Platform (GCP)</span>
+                            <span class="skill-tag">Cloud Computing</span>
+                            <span class="skill-tag">Cloud Applications</span>
+                        </div>
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fab fa-google" style="color: #4285f4;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">Google</div>
+                                <div class="certificate-date">Issued Nov 2023</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">Digital Transformation with Google Cloud</h3>
+
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fab fa-google" style="color: #4285f4;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">Google</div>
+                                <div class="certificate-date">Issued Nov 2023</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">Infrastructure and Application Modernization with Google Cloud</h3>
+
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fab fa-google" style="color: #4285f4;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">Google</div>
+                                <div class="certificate-date">Issued Nov 2023</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">Innovating with Data and Google Cloud</h3>
+
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fab fa-google" style="color: #4285f4;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">Google</div>
+                                <div class="certificate-date">Issued Nov 2023</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">Introduction to Generative AI</h3>
+
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fab fa-google" style="color: #4285f4;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">Google</div>
+                                <div class="certificate-date">Issued Nov 2023</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">Introduction to Large Language Models</h3>
+
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fab fa-google" style="color: #4285f4;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">Google</div>
+                                <div class="certificate-date">Issued Nov 2023</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">Introduction to Responsible AI</h3>
+
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fab fa-google" style="color: #4285f4;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">Google</div>
+                                <div class="certificate-date">Issued Nov 2023</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">Understanding Google Cloud Security and Operations</h3>
+                        <div class="credential-id">Credential ID: 6103351</div>
+                        <div class="certificate-actions">
+                            <a href="#" class="btn-credential">
+                                <i class="fas fa-certificate"></i> Show Credential
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Other Certificates -->
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fas fa-graduation-cap" style="color: #a435f0;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">Udemy</div>
+                                <div class="certificate-date">Issued Jan 2023 · Expires Feb 2033</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">Photoshop course for beginner to Advance</h3>
+                        <div class="certificate-skills">
+                            <span class="skill-tag">Adobe Photoshop</span>
+                        </div>
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fas fa-building" style="color: #0052cc;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">Tata Consultancy Services</div>
+                                <div class="certificate-date">Issued Dec 2022</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">TCS iON Career Edge - Young Professional</h3>
+                        <div class="certificate-actions">
+                            <a href="#" class="btn-credential">
+                                <i class="fas fa-certificate"></i> Show Credential
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fas fa-graduation-cap" style="color: #a435f0;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">Udemy</div>
+                                <div class="certificate-date">Issued Nov 2022</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">Object Oriented Programming in C++ & Interview Preparation</h3>
+                        <div class="credential-id">Credential ID: UC-1dc9ed7c-bbde-4d14-b47a-1576145d6a4a</div>
+                        <div class="certificate-skills">
+                            <span class="skill-tag">C++</span>
+                        </div>
+                        <div class="certificate-actions">
+                            <a href="#" class="btn-credential">
+                                <i class="fas fa-certificate"></i> Show Credential
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fab fa-google" style="color: #4285f4;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">Google</div>
+                                <div class="certificate-date">Issued May 2022</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">Google's The Fundamentals of Digital Marketing</h3>
+                        <div class="credential-id">Credential ID: 5FV RSN SVQ</div>
+                        <div class="certificate-skills">
+                            <span class="skill-tag">Marketing</span>
+                        </div>
+                        <div class="certificate-actions">
+                            <a href="#" class="btn-credential">
+                                <i class="fas fa-certificate"></i> Show Credential
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fas fa-building" style="color: #0052cc;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">Tata Consultancy Services</div>
+                                <div class="certificate-date">Issued Apr 2022</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">Communication Skills</h3>
+                        <div class="credential-id">Credential ID: 91306-21956685-1016</div>
+                        <div class="certificate-skills">
+                            <span class="skill-tag">Communication</span>
+                        </div>
+                        <div class="certificate-actions">
+                            <a href="#" class="btn-credential">
+                                <i class="fas fa-certificate"></i> Show Credential
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fas fa-building" style="color: #0052cc;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">TCS iON</div>
+                                <div class="certificate-date">Issued Apr 2022</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">Email Etiquette by TCS ion</h3>
+                        <div class="credential-id">Credential ID: 66785-21956685-1016</div>
+                        <div class="certificate-skills">
+                            <span class="skill-tag">Professional Ethics</span>
+                            <span class="skill-tag">Email</span>
+                        </div>
+                        <div class="certificate-actions">
+                            <a href="#" class="btn-credential">
+                                <i class="fas fa-certificate"></i> Show Credential
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fas fa-chart-bar" style="color: #28a745;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">DIGISAKHAM</div>
+                                <div class="certificate-date">Issued Apr 2022</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">Essentials of Excel</h3>
+                        <div class="certificate-actions">
+                            <a href="#" class="btn-credential">
+                                <i class="fas fa-certificate"></i> Show Credential
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fab fa-python" style="color: #3776ab;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">freeCodeCamp</div>
+                                <div class="certificate-date">Issued Jan 2022</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">Introduction to Programming Using Python</h3>
+                        <div class="credential-id">Credential ID: b393c68-8be2-416c-b279-12cf5a4f3c7</div>
+                        <div class="certificate-actions">
+                            <a href="#" class="btn-credential">
+                                <i class="fas fa-certificate"></i> Show Credential
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fab fa-google" style="color: #4285f4;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">Google</div>
+                                <div class="certificate-date">Issued Mar 2024 · Expired Mar 2024</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">The Arcade Certification Zone March 2024</h3>
+                        <div class="credential-id">Credential ID: 8339931</div>
+                        <div class="certificate-actions">
+                            <a href="#" class="btn-credential">
+                                <i class="fas fa-certificate"></i> Show Credential
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="certificate-card">
+                        <div class="certificate-header">
+                            <div class="certificate-icon">
+                                <i class="fab fa-python" style="color: #3776ab;"></i>
+                            </div>
+                            <div class="certificate-provider">
+                                <div class="provider-name">SkillUp Coalition</div>
+                                <div class="certificate-date">Issued</div>
+                            </div>
+                        </div>
+                        <h3 class="certificate-title">Data Science with Python</h3>
+                        <div class="certificate-actions">
+                            <a href="#" class="btn-credential">
+                                <i class="fas fa-certificate"></i> Show Credential
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-column">
+                        <div class="footer-logo">
+                            <img src="assets/images/logo.png" alt="Omkesh Narwade" class="footer-logo-image">
+                        </div>
+                        <h3 class="footer-title">Connect With Me</h3>
+                        <div class="footer-social-grid">
+                            <a href="https://github.com/omkesh360" target="_blank" class="social-link glass-btn" title="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="https://www.linkedin.com/in/omkesh-narwade-6138a5237/" target="_blank" class="social-link glass-btn" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                            <a href="https://www.instagram.com/mortal_omkesh360/" target="_blank" class="social-link glass-btn" title="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="https://twitter.com/omkesh360" target="_blank" class="social-link glass-btn" title="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="https://www.facebook.com/omkesh.narwade.5" target="_blank" class="social-link glass-btn" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-column">
+                        <h3 class="footer-title">Quick Links</h3>
+                        <ul class="footer-links">
+                            <li><a href="index.html#home">Home</a></li>
+                            <li><a href="index.html#about">About</a></li>
+                            <li><a href="index.html#education">Education</a></li>
+                            <li><a href="certificates.html">Certificates</a></li>
+                            <li><a href="index.html#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <div class="footer-contact">
+                            <p><i class="fas fa-envelope"></i> omkeshnarwade9@outlook.com</p>
+                            <p><i class="fas fa-phone"></i> +91 8830 148125</p>
+                            <p><i class="fas fa-map-marker-alt"></i> Nanded & Aurangabad, India</p>
+                        </div>
+                        <div class="footer-tech">
+                            <span class="tech-badge">HTML5</span>
+                            <span class="tech-badge">CSS3</span>
+                            <span class="tech-badge">JavaScript</span>
+                            <span class="tech-badge">WordPress</span>
+                            <span class="tech-badge">PHP</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="footer-divider"></div>
+                    <p class="footer-bottom-text">Designed & Developed with <i class="fas fa-heart"></i> by Omkesh Narwade</p>
+                </div>
+            </div>
+        </footer>
+
+        <button class="back-to-top glass-btn" id="backToTop" style="position:fixed;right:24px;bottom:24px;z-index:999;display:none;">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+
+        <script>
+            // Mobile Menu Toggle
+            const mobileToggle = document.getElementById('mobileToggle');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileToggle && navLinks) {
+                mobileToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                    mobileToggle.classList.toggle('open');
+                });
+
+                // Close menu when clicking on links
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        navLinks.classList.remove('active');
+                        mobileToggle.classList.remove('open');
+                    });
+                });
+            }
+
+            // Back to Top Button
+            const backToTop = document.getElementById('backToTop');
+            if (backToTop) {
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 300) {
+                        backToTop.style.display = 'block';
+                    } else {
+                        backToTop.style.display = 'none';
+                    }
+                });
+
+                backToTop.addEventListener('click', function() {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+            
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const currentTheme = body.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    body.setAttribute('data-theme', newTheme);
+                    
+                    const icon = themeToggle.querySelector('i');
+                    icon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+                    
+                    localStorage.setItem('theme', newTheme);
+                });
+
+                // Load saved theme
+                const savedTheme = localStorage.getItem('theme') || 'dark';
+                body.setAttribute('data-theme', savedTheme);
+                const icon = themeToggle.querySelector('i');
+                icon.className = savedTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+            }
+        </script>
+    </div>
+</body>
+</html>        
+/* Light Mode Optimizations */
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --shadow-dark: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] body {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .certificate-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="light"] .certificate-card:hover {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+
+        [data-theme="light"] .glass-header {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .language-item {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="light"] .language-item:hover {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }        

@@ -1,0 +1,290 @@
+/* Optimized CSS Variables for Theme Management - Universal Game Theme */
+:root {
+    /* Dark Theme (Default) */
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #1a1a1a;
+    --bg-tertiary: #2a2a2a;
+    --bg-quaternary: #3a3a3a;
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --text-muted: #666666;
+    --text-inverse: #1a202c;
+    
+    /* Accent Colors */
+    --accent-primary: #6366f1;
+    --accent-secondary: #8b5cf6;
+    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --accent-hover: #5855eb;
+    
+    /* Glass Effects */
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-bg-strong: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-border-strong: rgba(255, 255, 255, 0.15);
+    --glass-hover: rgba(255, 255, 255, 0.1);
+    
+    /* Shadows */
+    --shadow-light: rgba(255, 255, 255, 0.1);
+    --shadow-dark: rgba(0, 0, 0, 0.3);
+    --shadow-strong: rgba(0, 0, 0, 0.5);
+    --shadow-subtle: rgba(0, 0, 0, 0.1);
+    
+    /* Effects */
+    --blur-amount: 20px;
+    --blur-strong: 30px;
+    --blur-subtle: 10px;
+    
+    /* Brand Colors */
+    --saffron: #ff9933;
+    --white: #ffffff;
+    --green: #138808;
+    --blue: #0a3d91;
+    
+    /* Status Colors */
+    --success: #10b981;
+    --success-bg: rgba(16, 185, 129, 0.1);
+    --error: #ef4444;
+    --error-bg: rgba(239, 68, 68, 0.1);
+    --warning: #f59e0b;
+    --warning-bg: rgba(245, 158, 11, 0.1);
+    --info: #3b82f6;
+    --info-bg: rgba(59, 130, 246, 0.1);
+    
+    /* Interactive States */
+    --hover-lift: translateY(-2px);
+    --active-scale: scale(0.98);
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* Legacy aliases for compatibility */
+    --bg: var(--bg-primary);
+    --card: var(--glass-bg);
+    --muted: var(--text-muted);
+    --ink: var(--text-primary);
+    --ink-2: var(--text-secondary);
+    --panel: var(--glass-bg);
+    --accent: var(--accent-primary);
+    --glass: var(--glass-bg);
+    --shadow: 0 12px 32px var(--shadow-dark);
+    --good: var(--success);
+    --bad: var(--error);
+    --warn: var(--warning);
+}
+
+[data-theme="light"] {
+    /* Light Theme Overrides */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #e2e8f0;
+    --bg-quaternary: #cbd5e1;
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --text-inverse: #ffffff;
+    
+    /* Glass Effects for Light Theme */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-bg-strong: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --glass-border-strong: rgba(255, 255, 255, 0.9);
+    --glass-hover: rgba(255, 255, 255, 0.9);
+    
+    /* Shadows for Light Theme */
+    --shadow-light: rgba(255, 255, 255, 0.8);
+    --shadow-dark: rgba(0, 0, 0, 0.08);
+    --shadow-strong: rgba(0, 0, 0, 0.15);
+    --shadow-subtle: rgba(0, 0, 0, 0.05);
+    
+    /* Effects */
+    --blur-amount: 15px;
+    --blur-strong: 25px;
+    --blur-subtle: 8px;
+    
+    /* Status Colors for Light Theme */
+    --success-bg: rgba(16, 185, 129, 0.15);
+    --error-bg: rgba(239, 68, 68, 0.15);
+    --warning-bg: rgba(245, 158, 11, 0.15);
+    --info-bg: rgba(59, 130, 246, 0.15);
+    
+    /* Legacy aliases for compatibility */
+    --bg: var(--bg-primary);
+    --card: var(--glass-bg);
+    --muted: var(--text-muted);
+    --ink: var(--text-primary);
+    --ink-2: var(--text-secondary);
+    --panel: var(--glass-bg);
+    --accent: var(--accent-primary);
+    --glass: var(--glass-bg);
+    --shadow: 0 12px 32px var(--shadow-dark);
+}
+
+/* Theme-specific background gradients */
+:root {
+    --bg-gradient: radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                   radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+}
+
+[data-theme="light"] {
+    --bg-gradient: radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+                   radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+}
+
+/* Universal Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border-strong);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    z-index: 1000;
+    box-shadow: 0 8px 25px var(--shadow-dark);
+}
+
+.theme-toggle:hover {
+    transform: var(--hover-lift) scale(1.05);
+    box-shadow: 0 12px 35px var(--shadow-strong);
+    background: var(--glass-hover);
+}
+
+.theme-toggle:active {
+    transform: var(--active-scale);
+}
+
+/* Universal Button Styles */
+.btn, button {
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    padding: 10px 16px;
+    background: var(--accent-gradient);
+    color: white;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.btn:hover, button:hover {
+    transform: var(--hover-lift);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+}
+
+.btn:active, button:active {
+    transform: var(--active-scale);
+}
+
+.btn.secondary, button.secondary {
+    background: var(--glass-bg-strong);
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 12px var(--shadow-dark);
+}
+
+.btn.ghost, button.ghost {
+    background: var(--glass-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 12px var(--shadow-dark);
+}
+
+/* Universal Card Styles */
+.card, .panel, .glass-card {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 12px 32px var(--shadow-dark);
+    transition: all var(--transition-normal);
+}
+
+.card:hover, .panel:hover, .glass-card:hover {
+    border-color: var(--glass-border-strong);
+    box-shadow: 0 16px 40px var(--shadow-strong);
+}
+
+/* Universal Status Classes */
+.success {
+    color: var(--success);
+    border-color: var(--success);
+    background: var(--success-bg);
+}
+
+.error {
+    color: var(--error);
+    border-color: var(--error);
+    background: var(--error-bg);
+}
+
+.warning {
+    color: var(--warning);
+    border-color: var(--warning);
+    background: var(--warning-bg);
+}
+
+.info {
+    color: var(--info);
+    border-color: var(--info);
+    background: var(--info-bg);
+}
+
+/* Universal Body Styles */
+body {
+    background: var(--bg-primary);
+    background-image: var(--bg-gradient);
+    color: var(--text-primary);
+    transition: all var(--transition-normal);
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* Universal Header Styles */
+.header, header {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border-strong);
+    box-shadow: 0 8px 32px var(--shadow-dark);
+    transition: all var(--transition-normal);
+}
+
+/* Universal Text Styles */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+    transition: color var(--transition-normal);
+}
+
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+
+/* Universal Interactive Elements */
+.interactive {
+    transition: all var(--transition-normal);
+    cursor: pointer;
+}
+
+.interactive:hover {
+    transform: var(--hover-lift);
+}
+
+.interactive:active {
+    transform: var(--active-scale);
+}
+
+/* Smooth theme transitions for all elements */
+* {
+    transition: background-color var(--transition-normal), 
+                color var(--transition-normal), 
+                border-color var(--transition-normal),
+                box-shadow var(--transition-normal);
+}

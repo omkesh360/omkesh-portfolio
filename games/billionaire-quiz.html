@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Kaun Banega Crorepati - Omkesh Narwade</title>
+<style>
+  /* Optimized CSS Variables for Theme Management */
+  :root{
+    /* Dark Theme (Default) */
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #1a1a1a;
+    --bg-tertiary: #2a2a2a;
+    --bg-quaternary: #3a3a3a;
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --text-muted: #666666;
+    --text-inverse: #1a202c;
+    
+    /* Accent Colors */
+    --accent-primary: #6366f1;
+    --accent-secondary: #8b5cf6;
+    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --accent-hover: #5855eb;
+    
+    /* Glass Effects - Enhanced for better text visibility */
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-bg-strong: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --glass-border-strong: rgba(255, 255, 255, 0.2);
+    --glass-hover: rgba(255, 255, 255, 0.15);
+    
+    /* Shadows */
+    --shadow-light: rgba(255, 255, 255, 0.1);
+    --shadow-dark: rgba(0, 0, 0, 0.3);
+    --shadow-strong: rgba(0, 0, 0, 0.5);
+    --shadow-subtle: rgba(0, 0, 0, 0.1);
+    
+    /* Effects */
+    --blur-amount: 20px;
+    --blur-strong: 30px;
+    --blur-subtle: 10px;
+    
+    /* Brand Colors */
+    --saffron: #ff9933;
+    --white: #ffffff;
+    --green: #138808;
+    --blue: #0a3d91;
+    
+    /* Status Colors */
+    --success: #10b981;
+    --success-bg: rgba(16, 185, 129, 0.1);
+    --error: #ef4444;
+    --error-bg: rgba(239, 68, 68, 0.1);
+    --warning: #f59e0b;
+    --warning-bg: rgba(245, 158, 11, 0.1);
+    --info: #3b82f6;
+    --info-bg: rgba(59, 130, 246, 0.1);
+    
+    /* Interactive States */
+    --hover-lift: translateY(-2px);
+    --active-scale: scale(0.98);
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* Legacy aliases for compatibility */
+    --bg: var(--bg-primary);
+    --card: var(--glass-bg);
+    --muted: var(--text-muted);
+    --ink: var(--text-primary);
+    --ink-2: var(--text-secondary);
+    --panel: var(--glass-bg);
+    --accent: var(--accent-primary);
+  }
+
+  [data-theme="light"] {
+    /* Light Theme Overrides */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #e2e8f0;
+    --bg-quaternary: #cbd5e1;
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --text-inverse: #ffffff;
+    
+    /* Glass Effects for Light Theme - Enhanced for better text visibility */
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-bg-strong: rgba(255, 255, 255, 0.95);
+    --glass-border: rgba(0, 0, 0, 0.1);
+    --glass-border-strong: rgba(0, 0, 0, 0.15);
+    --glass-hover: rgba(255, 255, 255, 0.95);
+    
+    /* Shadows for Light Theme */
+    --shadow-light: rgba(255, 255, 255, 0.8);
+    --shadow-dark: rgba(0, 0, 0, 0.08);
+    --shadow-strong: rgba(0, 0, 0, 0.15);
+    --shadow-subtle: rgba(0, 0, 0, 0.05);
+    
+    /* Effects */
+    --blur-amount: 15px;
+    --blur-strong: 25px;
+    --blur-subtle: 8px;
+    
+    /* Status Colors for Light Theme */
+    --success-bg: rgba(16, 185, 129, 0.15);
+    --error-bg: rgba(239, 68, 68, 0.15);
+    --warning-bg: rgba(245, 158, 11, 0.15);
+    --info-bg: rgba(59, 130, 246, 0.15);
+    
+    /* Legacy aliases for compatibility */
+    --bg: var(--bg-primary);
+    --card: var(--glass-bg);
+    --muted: var(--text-muted);
+    --ink: var(--text-primary);
+    --ink-2: var(--text-secondary);
+    --panel: var(--glass-bg);
+    --accent: var(--accent-primary);
+  }
+
+  /* Theme-specific background gradients */
+  :root {
+    --bg-gradient: radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                   radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+  }
+
+  [data-theme="light"] {
+    --bg-gradient: radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+                   radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:system-ui, -apple-system, "Segoe UI", Roboto, Arial;}
+  body{
+    background: var(--bg-primary);
+    background-image: var(--bg-gradient);
+    color:var(--ink); display:flex; align-items:center; justify-content:center; padding:20px;
+    transition: all var(--transition-normal);
+  }
+
+  .game {
+    width: min(1100px, 98vw); height: min(760px, 96vh);
+    display:grid; grid-template-columns: 1fr 340px; gap:18px; 
+    background: var(--glass-bg); backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border); border-radius:20px; padding:18px; 
+    box-shadow:0 18px 40px var(--shadow-dark);
+    overflow:hidden;
+  }
+
+  /* Left: main Q panel */
+  .play {
+    background: var(--glass-bg); backdrop-filter: blur(10px); 
+    border: 1px solid var(--glass-border); border-radius:12px; padding:18px; 
+    display:flex; flex-direction:column; gap:12px;
+    box-shadow: 0 10px 30px var(--shadow-dark);
+  }
+  .header { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .title { display:flex; align-items:center; gap:12px; }
+  .logo {
+    width:64px; height:64px; border-radius:12px; display:flex;align-items:center;justify-content:center;
+    background: var(--glass-bg-strong); font-weight:900; font-size:14px; color: var(--accent-primary);
+    border: 2px solid var(--glass-border);
+    backdrop-filter: blur(var(--blur-amount));
+  }
+  .game-title { font-size:20px; font-weight:800; text-transform:uppercase; letter-spacing:0.6px; color:var(--accent); }
+
+  .meta { display:flex; gap:10px; align-items:center; }
+  .chip { 
+    background: var(--glass-bg-strong); 
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    padding:8px 10px; border-radius:999px; font-weight:700; 
+    box-shadow:0 8px 20px var(--shadow-dark);
+    text-shadow: 0 1px 2px var(--shadow-subtle);
+  }
+
+  .question-box { flex:1; display:flex; flex-direction:column; gap:12px; justify-content:center; align-items:stretch; padding: 8px 6px; }
+  .question { 
+    font-size:22px; font-weight:700; line-height:1.25; color:var(--text-primary); 
+    text-shadow: 0 1px 3px var(--shadow-subtle);
+  }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; }
+  .opt {
+    background: var(--glass-bg-strong); 
+    border: 1px solid var(--glass-border);
+    border-radius:10px; padding:14px; cursor:pointer; 
+    display:flex; gap:10px; align-items:center; font-weight:700; 
+    color:var(--text-primary);
+    text-shadow: 0 1px 2px var(--shadow-subtle);
+    transition: all var(--transition-normal);
+  }
+  .opt.small { padding:10px; font-size:14px; }
+  .opt:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(10,20,40,0.06); }
+  .opt.disabled { opacity:0.45; pointer-events:none; transform:none; }
+
+  .opt.correct { background: linear-gradient(90deg, rgba(40, 167, 69, 0.2), rgba(40, 167, 69, 0.3)); border-color:#28a745; color: var(--text-primary); }
+  .opt.wrong { background: linear-gradient(90deg, rgba(224, 75, 75, 0.2), rgba(224, 75, 75, 0.3)); border-color:#e04b4b; color: var(--text-primary); }
+
+  .lifelines { display:flex; gap:10px; }
+  .ll { background:linear-gradient(180deg,#fff,#f6f8ff); padding:8px 10px; border-radius:10px; cursor:pointer; font-weight:800; border:2px solid rgba(0,0,0,0.04); }
+  .ll.used { opacity:0.45; pointer-events:none; transform:none; }
+
+  .bottom { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:6px; }
+  .timer {
+    width:100%; height:10px; background:#e7eefc; border-radius:999px; overflow:hidden;
+    border:1px solid rgba(10,20,50,0.03);
+  }
+  .timer > span { display:block; height:100%; width:0%; background: linear-gradient(90deg,#0a3d91,#6b8afd); transition:width 0.2s linear; }
+
+  /* Right: prize ladder */
+  .ladder {
+    background: var(--glass-bg); backdrop-filter: blur(10px); 
+    border: 1px solid var(--glass-border); border-radius:12px; padding:12px; 
+    display:flex; flex-direction:column; gap:12px;
+    box-shadow: 0 10px 30px var(--shadow-dark);
+  }
+  .ladder h3 { margin:0 0 4px; color:var(--accent); }
+  .prize-list { flex:1; overflow:auto; padding-right:6px; }
+  .prize { display:flex; justify-content:space-between; padding:8px; border-radius:8px; margin-bottom:6px; font-weight:800; }
+  .prize.now { background: linear-gradient(90deg, rgba(255, 193, 7, 0.2), rgba(255, 193, 7, 0.3)); border:1px solid var(--glass-border); color: var(--text-primary); }
+  .prize.locked { opacity:0.6; background:transparent; }
+  .controls { display:flex; gap:8px; justify-content:space-between; margin-top:6px; }
+
+  .center-info { text-align:center; color:var(--text-muted); font-weight:700; }
+
+  /* Universal text visibility enhancements */
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary) !important;
+    text-shadow: 0 1px 3px var(--shadow-subtle);
+  }
+
+  p, span, div, label {
+    color: var(--text-primary) !important;
+  }
+
+  .text-secondary {
+    color: var(--text-secondary) !important;
+    font-weight: 600;
+  }
+
+  .text-muted {
+    color: var(--text-muted) !important;
+    font-weight: 600;
+  }
+
+  /* Enhanced glass card text visibility */
+  .play, .ladder, .card, .panel {
+    color: var(--text-primary) !important;
+    background: var(--glass-bg-strong) !important;
+  }
+
+  .play *, .ladder *, .card *, .panel * {
+    color: var(--text-primary) !important;
+  }
+
+  .game-title {
+    color: var(--accent-primary) !important;
+    text-shadow: 0 1px 3px var(--shadow-subtle);
+  }
+
+  /* overlays */
+  .overlay {
+    position:absolute; inset:0; display:none; align-items:center; justify-content:center; z-index:40;
+    background: rgba(2,6,23,0.45);
+  }
+  .panel {
+    background: #fff; padding:18px; border-radius:12px; max-width:680px; width:90%;
+  }
+
+  /* responsive */
+  @media (max-width:980px){
+    .game{grid-template-columns:1fr; grid-auto-rows: auto 320px; height:auto;}
+    .ladder{order:2}
+  }
+</style>
+</head>
+<body data-theme="dark">
+<!-- Go to Projects Button -->
+<a href="../projects.html" class="go-projects-btn" style="position: fixed; top: 20px; left: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.75rem 1.5rem; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 0.9rem; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); transition: all 0.3s ease; z-index: 1000; display: flex; align-items: center; gap: 0.5rem;">
+    <i class="fas fa-folder-open"></i> Projects
+</a>
+
+<button class="theme-toggle" id="themeToggle" style="position: fixed; top: 20px; right: 20px; background: var(--glass-bg); backdrop-filter: blur(var(--blur-amount)); border: 1px solid var(--glass-border); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; color: var(--text-primary); font-size: 1.2rem; z-index: 1000;">
+    <i class="fas fa-moon"></i>
+</button>
+
+<div class="game" role="application" aria-label="Kaun Banega Crorepati - Indian Quiz">
+  <div class="play" id="playArea">
+    <div class="header">
+      <div class="title">
+        <div class="logo">KBC</div>
+        <div>
+          <div class="game-title">Kaun Banega Crorepati — Bharat Edition</div>
+          <div class="muted">Answer the questions, use lifelines, win big</div>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="chip" id="levelChip">Q: 1</div>
+        <div class="chip" id="winningsChip">Winnings: ₹0</div>
+      </div>
+    </div>
+
+    <div class="question-box">
+      <div class="question" id="questionText">Loading question...</div>
+      <div class="options" id="options">
+        <!-- option buttons injected -->
+      </div>
+
+      <div class="lifelines" aria-hidden="false">
+        <div class="ll" id="fiftyBtn" title="50:50 — removes two wrong answers">50:50</div>
+        <div class="ll" id="phoneBtn" title="Phone a Friend — get a suggestion">Phone a Friend</div>
+        <div class="ll" id="audBtn" title="Ask the Audience — poll result">Ask the Audience</div>
+      </div>
+
+      <div class="bottom">
+        <div style="flex:1">
+          <div class="timer" aria-hidden="false"><span id="timerBar"></span></div>
+          <div class="center-info" id="msgArea">Press 1–4 to answer. Lifelines available.</div>
+        </div>
+        <div style="width:220px">
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <button class="ll" id="walkBtn" title="Walk away and take current winnings">Walk Away</button>
+            <button class="ll" id="quitBtn" title="Quit the game">Quit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <aside class="ladder" id="ladder">
+    <h3>Prize Ladder</h3>
+    <div class="prize-list" id="prizeList" role="list">
+      <!-- ladder generated -->
+    </div>
+    <div class="controls">
+      <div class="center-info">Best: <span id="bestW">₹0</span></div>
+      <div><button class="ll" id="restartBtn">Restart</button></div>
+    </div>
+  </aside>
+</div>
+
+<!-- Simple overlay for phone & audience -->
+<div class="overlay" id="overlayModal"><div class="panel" id="overlayPanel"><div id="overlayContent">...</div></div></div>
+
+<script>
+/*
+  KBC-style Quiz Game
+  - Save as kbc.html and open in browser
+  - Keyboard: 1-4 to answer, keys for UI: R restart
+*/
+
+(function(){
+  // ---- Config and data ----
+  const QUESTIONS = [
+    { q: "What is the capital of India?", opts:["Mumbai","Kolkata","New Delhi","Chennai"], a:2 },
+    { q: "Which river flows through Varanasi?", opts:["Yamuna","Ganga","Cauvery","Godavari"], a:1 },
+    { q: "Who wrote the Indian national song 'Vande Mataram'?", opts:["Bankim Chandra Chattopadhyay","Rabindranath Tagore","Subramania Bharati","Sarojini Naidu"], a:0 },
+    { q: "Which festival is known as the festival of lights in India?", opts:["Holi","Diwali","Eid","Pongal"], a:1 },
+    { q: "What is the national animal of India?", opts:["Tiger","Elephant","Peacock","Lion"], a:0 },
+    { q: "Which city is known as the Silicon Valley of India?", opts:["Bengaluru","Hyderabad","Pune","Ahmedabad"], a:0 },
+    { q: "Who was the first Prime Minister of independent India?", opts:["Indira Gandhi","Jawaharlal Nehru","Lal Bahadur Shastri","Mahatma Gandhi"], a:1 },
+    { q: "Which classical dance form originates from Kerala?", opts:["Kathak","Bharatanatyam","Mohiniyattam","Odissi"], a:2 },
+    { q: "Which Indian missile is named after a Dravidian king?", opts:["Prithvi","Agni","Nag","BrahMos"], a:1 }, // Agni? (example)
+    { q: "Which mountain range forms the northern boundary of the Indian subcontinent?", opts:["Aravalli","Himalayas","Vindhyas","Satpura"], a:1 },
+    { q: "What does 'NRI' stand for?", opts:["National Registered Indian","Non-Resident Indian","National Resource Institute","National Railways India"], a:1 },
+    { q: "Which classical musician was awarded Bharat Ratna?", opts:["Ravi Shankar","Lata Mangeshkar","Zakir Hussain","A.R. Rahman"], a:0 }
+  ];
+  // Prize ladder (from smallest to highest)
+  const PRIZES = [1000,5000,20000,80000,320000,1250000,5000000,20000000,50000000,70000000,100000000,700000000];
+
+  // Game state
+  let state = {
+    qIndex: 0,
+    usedQ: [],
+    winnings: 0,
+    best: Number(localStorage.getItem('kbc_best')) || 0,
+    lifelines: { fifty:true, phone:true, aud:true },
+    answered: false,
+    timer: 30,
+    timerInterval: null,
+    disabledOpts: new Set(),
+    gameOver: false
+  };
+
+  // DOM refs
+  const questionText = document.getElementById('questionText');
+  const optionsRoot = document.getElementById('options');
+  const levelChip = document.getElementById('levelChip');
+  const winningsChip = document.getElementById('winningsChip');
+  const prizeList = document.getElementById('prizeList');
+  const timerBar = document.getElementById('timerBar');
+  const msgArea = document.getElementById('msgArea');
+  const overlay = document.getElementById('overlayModal');
+  const overlayPanel = document.getElementById('overlayPanel');
+  const overlayContent = document.getElementById('overlayContent');
+  const bestW = document.getElementById('bestW');
+
+  // lifeline buttons
+  const fiftyBtn = document.getElementById('fiftyBtn');
+  const phoneBtn = document.getElementById('phoneBtn');
+  const audBtn = document.getElementById('audBtn');
+  const walkBtn = document.getElementById('walkBtn');
+  const quitBtn = document.getElementById('quitBtn');
+  const restartBtn = document.getElementById('restartBtn');
+
+  // initialize
+  function init(){
+    buildPrizeLadder();
+    loadQuestion(0);
+    bindEvents();
+    updateHUD();
+    bestW.textContent = formatINR(state.best);
+    timerBar.style.width = '0%';
+  }
+
+  // format INR
+  function formatINR(n){
+    if (n >= 1e7) return "₹" + (n/1e7).toFixed(2) + " Cr";
+    return "₹" + n.toLocaleString('en-IN');
+  }
+
+  // build ladder
+  function buildPrizeLadder(){
+    prizeList.innerHTML = '';
+    for (let i = PRIZES.length-1; i >=0; i--){
+      const div = document.createElement('div');
+      div.className = 'prize' + (i===0 ? '' : '');
+      div.dataset.index = i;
+      div.innerHTML = `<div>#${i+1}</div><div>${formatINR(PRIZES[i])}</div>`;
+      prizeList.appendChild(div);
+    }
+    highlightLadder();
+  }
+
+  function highlightLadder(){
+    const nodes = [...prizeList.children];
+    nodes.forEach((n,i)=> n.classList.remove('now','locked'));
+    for (let i = 0; i < nodes.length; i++){
+      const realIndex = nodes.length -1 - i; // because we built reverse
+      const node = nodes[i];
+      if (realIndex == state.qIndex) node.classList.add('now');
+      else if (realIndex < state.qIndex) node.classList.add('locked');
+    }
+  }
+
+  // pick next unused question (simple sequential in this implementation)
+  function loadQuestion(index=null){
+    if (index == null) index = state.qIndex;
+    if (index >= QUESTIONS.length){
+      // game complete — award top prize
+      state.winnings = PRIZES[PRIZES.length-1];
+      finishGame(true);
+      return;
+    }
+    state.answered = false;
+    state.disabledOpts.clear();
+    const q = QUESTIONS[index];
+    questionText.textContent = q.q;
+    optionsRoot.innerHTML = '';
+    q.opts.forEach((opt, i) => {
+      const btn = document.createElement('div');
+      btn.className = 'opt';
+      btn.tabIndex = 0;
+      btn.dataset.idx = i;
+      btn.innerHTML = `<div style="width:28px;text-align:center;font-weight:900;">${"ABCD"[i]}</div><div>${opt}</div>`;
+      btn.addEventListener('click', ()=>selectOption(i));
+      optionsRoot.appendChild(btn);
+    });
+    state.timer = 30;
+    startTimer();
+    updateHUD();
+    highlightLadder();
+    msgArea.textContent = 'Press 1-4 to answer. Use lifelines if needed.';
+  }
+
+  // timer
+  function startTimer(){
+    clearInterval(state.timerInterval);
+    timerBar.style.width = '100%';
+    const total = state.timer;
+    let elapsed = 0;
+    state.timerInterval = setInterval(()=>{
+      elapsed += 0.5;
+      const perc = Math.max(0, ((total - elapsed)/total)*100);
+      timerBar.style.width = perc + '%';
+      if (elapsed >= total){
+        clearInterval(state.timerInterval);
+        timeoutQuestion();
+      }
+    }, 500);
+  }
+  function stopTimer(){ clearInterval(state.timerInterval); timerBar.style.width = '0%'; }
+
+  // when timer ends
+  function timeoutQuestion(){
+    msgArea.textContent = 'Time up! You failed to answer.';
+    revealAnswer(null); // treat as wrong
+  }
+
+  // select option
+  function selectOption(idx){
+    if (state.answered || state.gameOver) return;
+    if (state.disabledOpts.has(idx)) return;
+    state.answered = true;
+    stopTimer();
+    const q = QUESTIONS[state.qIndex];
+    const correct = q.a;
+    const nodes = [...optionsRoot.children];
+    nodes.forEach(n=> n.classList.add('disabled'));
+    if (idx === correct){
+      // correct
+      nodes[idx].classList.add('correct');
+      msgArea.textContent = 'Correct! Moving to next question...';
+      // award prize for this level
+      state.winnings = PRIZES[state.qIndex];
+      updateHUD();
+      setTimeout(()=> {
+        state.qIndex++;
+        loadQuestion();
+      }, 1200);
+    } else {
+      // wrong
+      nodes[idx].classList.add('wrong');
+      msgArea.textContent = 'Incorrect answer.';
+      revealAnswer(idx);
+    }
+  }
+
+  // reveal correct and end game
+  function revealAnswer(selectedIdx){
+    const q = QUESTIONS[state.qIndex];
+    const nodes = [...optionsRoot.children];
+    nodes.forEach((n,i)=>{
+      if (i === q.a) n.classList.add('correct');
+      n.classList.add('disabled');
+    });
+    // determine guaranteed safe amount (milestones)
+    const guaranteed = getGuaranteed(state.qIndex);
+    state.winnings = guaranteed;
+    updateHUD();
+    // game over after short delay
+    setTimeout(()=> finishGame(false), 1400);
+  }
+
+  function getGuaranteed(index){
+    // typical KBC: after Q5 and Q10 guaranteed
+    if (index >= 10) return PRIZES[10];
+    if (index >= 5) return PRIZES[5];
+    return 0;
+  }
+
+  // finish game
+  function finishGame(completed){
+    state.gameOver = true;
+    stopTimer();
+    updateHUD();
+    // save best
+    if (state.winnings > state.best){
+      state.best = state.winnings;
+      localStorage.setItem('kbc_best', state.best);
+      bestW.textContent = formatINR(state.best);
+    }
+    // show final overlay
+    showOverlay(`<h2 style="margin-top:0">${completed ? "Congratulations!" : "Game Over"}</h2>
+      <p>Your winnings: <strong>${formatINR(state.winnings)}</strong></p>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:12px">
+        <button id="playAgain" class="ll">Play Again</button>
+        <button id="closeOver" class="ll">Close</button>
+      </div>`);
+    document.getElementById('playAgain').addEventListener('click', ()=>{ hideOverlay(); restartGame(); });
+    document.getElementById('closeOver').addEventListener('click', ()=>{ hideOverlay(); });
+  }
+
+  // lifelines
+  fiftyBtn.addEventListener('click', ()=>useFifty());
+  phoneBtn.addEventListener('click', ()=>usePhone());
+  audBtn.addEventListener('click', ()=>useAudience());
+  walkBtn.addEventListener('click', ()=>walkAway());
+  quitBtn.addEventListener('click', ()=>{ if(confirm("Quit the game?")) location.reload(); });
+  restartBtn.addEventListener('click', ()=>restartGame());
+
+  function useFifty(){
+    if (!state.lifelines.fifty || state.answered) return;
+    state.lifelines.fifty = false;
+    fiftyBtn.classList.add('used');
+    // remove two wrong options
+    const q = QUESTIONS[state.qIndex];
+    const wrongs = [0,1,2,3].filter(i=> i!== q.a);
+    // random pick two to remove
+    shuffleArray(wrongs);
+    const toRemove = wrongs.slice(0,2);
+    toRemove.forEach(idx=> {
+      state.disabledOpts.add(idx);
+      const el = optionsRoot.querySelector(`[data-idx="${idx}"]`);
+      if (el) el.classList.add('disabled');
+    });
+    msgArea.textContent = '50:50 used — two wrong options removed.';
+  }
+
+  function usePhone(){
+    if (!state.lifelines.phone || state.answered) return;
+    state.lifelines.phone = false;
+    phoneBtn.classList.add('used');
+    const q = QUESTIONS[state.qIndex];
+    // Phone a friend gives suggestion with some probability of being correct
+    const correct = q.a;
+    const pCorrect = 0.75; // 75% likely to suggest correct
+    const suggestCorrect = Math.random() < pCorrect;
+    const suggestion = suggestCorrect ? correct : pickRandom([0,1,2,3].filter(i=> i!==correct));
+    showOverlay(`<h3>Phone a Friend</h3><p>Your friend thinks the answer is option <strong>${"ABCD"[suggestion]}</strong>.</p>
+      <div style="text-align:center;margin-top:12px"><button id="pClose" class="ll">Close</button></div>`);
+    document.getElementById('pClose').addEventListener('click', hideOverlay);
+    msgArea.textContent = 'Phone a Friend used.';
+  }
+
+  function useAudience(){
+    if (!state.lifelines.aud || state.answered) return;
+    state.lifelines.aud = false;
+    audBtn.classList.add('used');
+    const q = QUESTIONS[state.qIndex];
+    const correct = q.a;
+    // Generate poll that favors correct answer
+    const base = [10,10,10,10];
+    let remaining = 70;
+    base[correct] += 30; remaining -= 30;
+    // distribute remaining randomly but biased
+    for (let i=0;i<4;i++){
+      const add = Math.round(Math.random()*remaining/2);
+      base[i] += add;
+      remaining -= add;
+    }
+    // normalize to 100
+    let sum = base.reduce((s,x)=>s+x,0);
+    base.forEach((v,i)=> base[i] = Math.round((v/sum)*100));
+    showOverlay(`<h3>Ask the Audience</h3>
+      <p>Audience Poll:</p>
+      <ul style="list-style:none;padding:0">
+        ${base.map((v,i)=> `<li style="margin:6px 0"><strong>${"ABCD"[i]}</strong>: ${v}%</li>`).join('')}
+      </ul>
+      <div style="text-align:center;margin-top:12px"><button id="aClose" class="ll">Close</button></div>`);
+    document.getElementById('aClose').addEventListener('click', hideOverlay);
+    msgArea.textContent = 'Audience poll used.';
+  }
+
+  // walk away
+  function walkAway(){
+    if (state.answered || state.gameOver) return;
+    state.gameOver = true;
+    stopTimer();
+    // You take current winnings (previous question prize)
+    const take = state.qIndex === 0 ? 0 : PRIZES[state.qIndex-1];
+    state.winnings = take;
+    updateHUD();
+    finishGame(false);
+  }
+
+  // overlay helpers
+  function showOverlay(html){
+    overlayContent.innerHTML = html;
+    overlay.style.display = 'flex';
+  }
+  function hideOverlay(){ overlay.style.display = 'none'; overlayContent.innerHTML=''; }
+
+  // utility: pick random
+  function pickRandom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function shuffleArray(a){ for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } }
+
+  // keyboard handling 1-4 and R
+  document.addEventListener('keydown', (e)=>{
+    if (state.gameOver) return;
+    if (e.key >= '1' && e.key <= '4'){
+      const idx = parseInt(e.key)-1;
+      selectOption(idx);
+    } else if (e.key.toLowerCase() === 'r') restartGame();
+    else if (e.key.toLowerCase() === 'l') { // show lifelines
+      showOverlay(`<h3>Lifelines</h3>
+        <p>50:50 — remove two wrong answers</p><p>Phone a Friend — friend suggests an option</p><p>Ask the Audience — poll</p>
+        <div style="text-align:center;margin-top:12px"><button id="closeL" class="ll">Close</button></div>`);
+      document.getElementById('closeL').addEventListener('click', hideOverlay);
+    }
+  });
+
+  // restart
+  function restartGame(){
+    state.qIndex = 0;
+    state.winnings = 0;
+    state.lifelines = { fifty:true, phone:true, aud:true };
+    state.answered = false;
+    state.gameOver = false;
+    state.disabledOpts.clear();
+    fiftyBtn.classList.remove('used'); phoneBtn.classList.remove('used'); audBtn.classList.remove('used');
+    loadQuestion(0);
+    hideOverlay();
+  }
+
+  // update HUD
+  function updateHUD(){
+    levelChip.textContent = 'Q: ' + (state.qIndex+1);
+    winningsChip.textContent = 'Winnings: ' + formatINR(state.winnings);
+    bestW.textContent = formatINR(state.best);
+    highlightLadder();
+  }
+
+  // initialize options occasionally disabled
+  function disableOptionByIndex(idx){
+    const opt = optionsRoot.querySelector(`[data-idx="${idx}"]`);
+    if (opt) { opt.classList.add('disabled'); state.disabledOpts.add(idx); }
+  }
+
+  // Initialize click on options (delegated earlier) done in loadQuestion
+
+  // initialize event bindings
+  function bindEvents(){
+    // ensure overlay click outside closes
+    overlay.addEventListener('click', (e)=>{ if (e.target === overlay) hideOverlay(); });
+
+    // simple audio efx
+    // Nothing else bound
+  }
+
+  // Theme toggle functionality
+  const themeToggle = document.getElementById('themeToggle');
+  const body = document.body;
+  
+  themeToggle.addEventListener('click', () => {
+    const currentTheme = body.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    body.setAttribute('data-theme', newTheme);
+    
+    const icon = themeToggle.querySelector('i');
+    icon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    
+    localStorage.setItem('kbc-theme', newTheme);
+  });
+
+  // Load saved theme
+  const savedTheme = localStorage.getItem('kbc-theme') || 'dark';
+  body.setAttribute('data-theme', savedTheme);
+  const icon = themeToggle.querySelector('i');
+  icon.className = savedTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+
+  // start
+  init();
+})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+    <!-- Technology Information Section -->
+    <div class="tech-info-section" style="position: fixed; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 1rem; border: 1px solid rgba(255, 255, 255, 0.2); z-index: 1000; max-width: 200px;">
+        <h4 style="color: #ffffff; margin: 0 0 0.5rem 0; font-size: 0.9rem; text-align: center;">Built With</h4>
+        <div class="tech-logos" style="display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" title="HTML5" style="width: 24px; height: 24px; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" title="CSS3" style="width: 24px; height: 24px; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" title="JavaScript" style="width: 24px; height: 24px; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+        </div>
+        <div style="text-align: center;">
+            <a href="info/kbc-info.html" style="color: #4a90e2; text-decoration: none; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.5rem; border-radius: 8px; background: rgba(74, 144, 226, 0.2); transition: all 0.3s ease;" onmouseover="this.style.background='rgba(74, 144, 226, 0.3)'" onmouseout="this.style.background='rgba(74, 144, 226, 0.2)'">
+                <i class="fas fa-info-circle"></i> Documentation
+            </a>
+        </div>
+    </div>
+
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+/* Universal Text Visibility Fix for All Games */
+
+/* Enhanced glass effects for better text visibility */
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.08) !important;
+    --glass-bg-strong: rgba(255, 255, 255, 0.12) !important;
+    --glass-border: rgba(255, 255, 255, 0.15) !important;
+    --glass-border-strong: rgba(255, 255, 255, 0.2) !important;
+}
+
+[data-theme="light"] {
+    --glass-bg: rgba(255, 255, 255, 0.85) !important;
+    --glass-bg-strong: rgba(255, 255, 255, 0.95) !important;
+    --glass-border: rgba(0, 0, 0, 0.1) !important;
+    --glass-border-strong: rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Universal text visibility enhancements */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary) !important;
+    text-shadow: 0 1px 3px var(--shadow-subtle);
+}
+
+p, span, div, label, button {
+    color: var(--text-primary) !important;
+}
+
+.text-secondary {
+    color: var(--text-secondary) !important;
+    font-weight: 600;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+    font-weight: 600;
+}
+
+/* Enhanced glass card text visibility */
+.glass-card, .card, .panel, .chip {
+    color: var(--text-primary) !important;
+    background: var(--glass-bg-strong) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+
+.glass-card *, .card *, .panel *, .chip * {
+    color: var(--text-primary) !important;
+}
+
+/* Specific game element fixes */
+.opt, .option, .question, .stat-value, .stat-label {
+    color: var(--text-primary) !important;
+    text-shadow: 0 1px 2px var(--shadow-subtle);
+}
+
+/* Button text visibility */
+button, .btn {
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+button.ghost, .btn.ghost, button.secondary, .btn.secondary {
+    color: var(--text-primary) !important;
+    text-shadow: 0 1px 2px var(--shadow-subtle);
+}
+
+/* Input and form elements */
+input, select, textarea {
+    color: var(--text-primary) !important;
+    background: var(--glass-bg-strong) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+
+/* Canvas and game-specific text */
+canvas + div, .hud, .score, .level-indicator {
+    color: var(--text-primary) !important;
+    text-shadow: 0 1px 3px var(--shadow-subtle);
+}

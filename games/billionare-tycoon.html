@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Bharat Billionaire - Omkesh Narwade</title>
+<style>
+  :root{
+    /* Dark Theme Variables */
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #1a1a1a;
+    --bg-tertiary: #2a2a2a;
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --text-muted: #888888;
+    --accent-primary: #6366f1;
+    --accent-secondary: #8b5cf6;
+    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-bg-strong: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --glass-hover: rgba(255, 255, 255, 0.15);
+    --shadow-light: rgba(255, 255, 255, 0.1);
+    --shadow-dark: rgba(0, 0, 0, 0.4);
+    --shadow-subtle: rgba(0, 0, 0, 0.2);
+    --blur-amount: 20px;
+    --transition-normal: 0.3s ease;
+    --hover-lift: translateY(-2px);
+    --active-scale: scale(0.98);
+    
+    /* Game specific colors */
+    --saffron: #ff9933;
+    --white: #ffffff;
+    --green: #138808;
+    --blue: #0a3d91;
+    --ink: var(--text-primary);
+    --ink-2: var(--text-secondary);
+    --muted: var(--text-muted);
+    --glass: var(--glass-bg-strong);
+    --bg: var(--bg-primary);
+    --card: var(--glass-bg-strong);
+    --shadow: 0 12px 32px var(--shadow-dark);
+    --accent: var(--accent-primary);
+    --good: #16a34a;
+    --bad: #dc2626;
+    --warn: #d97706;
+    
+    /* Background gradient */
+    --bg-gradient: radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                   radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                   radial-gradient(circle at 40% 40%, rgba(99, 102, 241, 0.05) 0%, transparent 50%);
+  }
+
+  [data-theme="light"] {
+    /* Light Theme Variables */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #e2e8f0;
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-bg-strong: rgba(255, 255, 255, 0.9);
+    --glass-border: rgba(0, 0, 0, 0.1);
+    --glass-hover: rgba(255, 255, 255, 0.8);
+    --shadow-light: rgba(255, 255, 255, 0.8);
+    --shadow-dark: rgba(0, 0, 0, 0.15);
+    --shadow-subtle: rgba(0, 0, 0, 0.05);
+    --blur-amount: 15px;
+    
+    /* Game specific light colors */
+    --ink: var(--text-primary);
+    --ink-2: var(--text-secondary);
+    --muted: var(--text-muted);
+    --glass: var(--glass-bg-strong);
+    --bg: var(--bg-primary);
+    --card: var(--glass-bg-strong);
+    --shadow: 0 12px 32px var(--shadow-dark);
+    --accent: var(--accent-primary);
+    
+    /* Light background gradient */
+    --bg-gradient: radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+                   radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
+                   radial-gradient(circle at 40% 40%, rgba(99, 102, 241, 0.03) 0%, transparent 50%);
+  }
+  * { box-sizing: border-box; }
+  html, body { 
+    height:100%; margin:0; 
+    background: var(--bg-primary);
+    background-image: var(--bg-gradient);
+    color: var(--text-primary); 
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; 
+    transition: all var(--transition-normal);
+  }
+  header {
+    position: sticky; top:0; z-index:10; backdrop-filter: blur(var(--blur-amount));
+    background: var(--glass-bg); border-bottom: 1px solid var(--glass-border);
+    padding: 10px 14px; box-shadow: 0 6px 24px var(--shadow-dark);
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+  .title { 
+    font-weight:900; letter-spacing:.3px; color:var(--text-primary); 
+    display:flex; align-items:center; gap:10px; 
+    text-shadow: 0 1px 3px var(--shadow-subtle);
+  }
+  .title .flag { width:22px; height:22px; border-radius:50%; border:2px solid #15202b; background:
+      conic-gradient(var(--saffron) 0 33%, var(--white) 33% 66%, var(--green) 66% 100%);}
+  .hud { display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
+  .chip {
+    background: var(--glass-bg-strong); 
+    backdrop-filter: blur(var(--blur-amount)); 
+    border: 1px solid var(--glass-border); 
+    padding: 8px 12px; 
+    border-radius: 999px; 
+    font-weight: 700;
+    box-shadow: 0 6px 18px var(--shadow-dark);
+    color: var(--text-primary);
+    text-shadow: 0 1px 2px var(--shadow-subtle);
+    font-size: 0.9rem;
+  }
+  .grid {
+    display:grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 16px; padding: 14px;
+  }
+  @media (max-width: 980px){ .grid{ grid-template-columns: 1fr; } }
+  .card {
+    background: var(--glass-bg-strong); 
+    backdrop-filter: blur(var(--blur-amount)); 
+    border: 1px solid var(--glass-border); 
+    border-radius: 16px; 
+    box-shadow: var(--shadow);
+    padding: 16px; 
+    min-height: 120px;
+    transition: all var(--transition-normal);
+  }
+  
+  .card:hover {
+    background: var(--glass-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px var(--shadow-dark);
+  }
+  .card h3 { 
+    margin:0 0 8px; font-size: 18px; 
+    color: var(--text-primary);
+    text-shadow: 0 1px 2px var(--shadow-subtle);
+  }
+  .row { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .muted { color: var(--text-muted); font-size: 13px; font-weight: 600; }
+
+  /* Universal text visibility enhancements */
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary) !important;
+    text-shadow: 0 1px 3px var(--shadow-subtle);
+  }
+
+  p, span, div, label {
+    color: var(--text-primary) !important;
+  }
+
+  .text-secondary {
+    color: var(--text-secondary) !important;
+    font-weight: 600;
+  }
+
+  .text-muted {
+    color: var(--text-muted) !important;
+    font-weight: 600;
+  }
+
+  /* Enhanced glass card text visibility */
+  .card, .panel {
+    color: var(--text-primary) !important;
+    background: var(--glass-bg-strong) !important;
+  }
+
+  .card *, .panel * {
+    color: var(--text-primary) !important;
+  }
+
+  .money {
+    color: var(--text-primary) !important;
+    text-shadow: 0 1px 2px var(--shadow-subtle);
+  }
+  .money { font-weight: 900; }
+  .btn {
+    appearance:none; border:0; cursor:pointer; background: var(--accent-gradient); color:white;
+    padding:8px 12px; border-radius: 10px; font-weight:800; 
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35); transition: all 0.3s ease;
+  }
+  .btn:hover {
+    transform: var(--hover-lift);
+    box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
+  }
+  .btn:active {
+    transform: var(--active-scale);
+  }
+  .btn.secondary { background:var(--glass-bg); color:var(--text-primary); border: 1px solid var(--glass-border); box-shadow: 0 8px 20px var(--shadow-dark); }
+  .btn.ghost { background:var(--glass-bg); color:var(--text-primary); box-shadow: 0 8px 20px var(--shadow-dark); border:2px solid var(--glass-border); }
+  .btn:disabled { opacity:.6; cursor:not-allowed; }
+  .kpis { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+  .list { display:flex; flex-direction:column; gap:10px; }
+  .biz { 
+    display: grid; 
+    grid-template-columns: 44px 1fr auto; 
+    gap: 12px; 
+    align-items: center; 
+    padding: 12px; 
+    border-radius: 12px; 
+    background: var(--glass-bg-strong); 
+    backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 12px var(--shadow-dark);
+    transition: all var(--transition-normal);
+    color: var(--text-primary);
+  }
+  
+  .biz:hover {
+    background: var(--glass-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px var(--shadow-dark);
+  }
+  .biz .ic { font-size: 24px; }
+  .progress { 
+    height: 12px; 
+    background: var(--glass-bg); 
+    border: 1px solid var(--glass-border);
+    border-radius: 999px; 
+    overflow: hidden; 
+    box-shadow: inset 0 2px 4px var(--shadow-dark);
+  }
+  .progress > span { 
+    display: block; 
+    height: 100%; 
+    background: var(--accent-gradient);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+  }
+  .ticker { height: 32px; overflow:hidden; position:relative; }
+  .ticker p { position:absolute; white-space:nowrap; animation: scroll 18s linear infinite; }
+  @keyframes scroll { from{ left: 100% } to { left: -200% } }
+
+  /* Event pills */
+  .pill { 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 6px; 
+    background: var(--glass-bg-strong); 
+    color: var(--text-primary); 
+    border: 1px solid var(--glass-border); 
+    padding: 6px 10px; 
+    border-radius: 999px; 
+    font-weight: 700; 
+    font-size: 12px;
+    backdrop-filter: blur(var(--blur-amount));
+    box-shadow: 0 2px 8px var(--shadow-dark);
+  }
+
+  /* Footer controls */
+  .footer { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+</style>
+</head>
+<body data-theme="dark">
+<!-- Go to Projects Button -->
+<a href="../projects.html" class="go-projects-btn" style="position: fixed; top: 20px; left: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.75rem 1.5rem; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 0.9rem; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); transition: all 0.3s ease; z-index: 1000; display: flex; align-items: center; gap: 0.5rem;">
+    <i class="fas fa-folder-open"></i> Projects
+</a>
+
+<button class="theme-toggle" id="themeToggle" style="position: fixed; top: 20px; right: 20px; background: var(--glass-bg); backdrop-filter: blur(var(--blur-amount)); border: 1px solid var(--glass-border); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; color: var(--text-primary); font-size: 1.2rem; z-index: 1000;">
+    <i class="fas fa-moon"></i>
+</button>
+
+<header>
+  <div class="wrap">
+    <div class="title"><span class="flag"></span><span>Bharat Billionaire — Desi Tycoon</span></div>
+    <div class="hud">
+      <div class="chip">Cash: <span id="cash" class="money">₹0</span></div>
+      <div class="chip">Net Worth: <span id="net" class="money">₹0</span></div>
+      <div class="chip">₹/sec: <span id="rps" class="money">0</span></div>
+      <div class="chip">GST: <span id="gst">10%</span></div>
+      <div class="chip">RBI Repo: <span id="repo">6.50%</span></div>
+      <div class="chip">Gold: <span id="goldP">₹0</span></div>
+      <div class="chip">NIFTY: <span id="niftyP">₹0</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="grid">
+    <!-- LEFT: Wealth & Achievements -->
+    <section class="card">
+      <h3>Wealth & Achievements</h3>
+      <div class="kpis">
+        <div>
+          <div class="muted">Next Milestone</div>
+          <div id="milestoneLabel" class="money">Lakhpati (₹1,00,000)</div>
+          <div class="progress"><span id="milestoneBar" style="width:0%"></span></div>
+        </div>
+        <div>
+          <div class="muted">Best Net Worth (local)</div>
+          <div id="best" class="money">₹0</div>
+          <button class="btn secondary" id="saveBtn" style="margin-top:6px">Save Now</button>
+        </div>
+      </div>
+      <div style="margin-top:10px" class="ticker"><p id="news">Welcome to Bharat Billionaire! Start small, dream big. 🇮🇳</p></div>
+      <div class="footer">
+        <button class="btn ghost" id="hustleBtn" title="Tap to hustle for some quick cash">Hustle (Tap)</button>
+        <button class="btn ghost" id="csrBtn" title="Spend on CSR to boost reputation for a while">CSR: Build School (₹1,00,00,000)</button>
+        <button class="btn ghost" id="resetBtn">Reset Game</button>
+        <span id="activeEvents"></span>
+      </div>
+      <div class="muted" style="margin-top:6px">Tip: Diwali/Festive boosts, Budget changes GST, RBI moves repo rate. Not financial advice — it’s a game 🙂</div>
+    </section>
+
+    <!-- CENTER: Businesses -->
+    <section class="card">
+      <h3>Businesses</h3>
+      <div id="bizList" class="list"></div>
+    </section>
+
+    <!-- RIGHT: Investments -->
+    <section class="card">
+      <h3>Investments</h3>
+      <div class="list">
+        <div class="row"><div><b>Fixed Deposit (FD)</b><div class="muted">Compounds by RBI repo rate</div></div>
+          <div class="row" style="gap:8px">
+            <button class="btn secondary" id="fdDep">Deposit ₹1L</button>
+            <button class="btn ghost" id="fdWit">Withdraw ₹1L</button>
+          </div>
+        </div>
+        <div class="row muted"><span>FD Balance</span><span id="fdBal" class="money">₹0</span></div>
+        <hr/>
+        <div class="row"><div><b>Gold</b><div class="muted">Random walk price (INR)</div></div>
+          <div class="row" style="gap:8px">
+            <button class="btn secondary" id="goldBuy">Buy 10g</button>
+            <button class="btn ghost" id="goldSell">Sell 10g</button>
+          </div>
+        </div>
+        <div class="row muted"><span>Gold Holdings</span><span id="goldHold" class="money">0 g</span></div>
+        <hr/>
+        <div class="row"><div><b>NIFTY Basket</b><div class="muted">Index-like basket</div></div>
+          <div class="row" style="gap:8px">
+            <button class="btn secondary" id="niftyBuy">Buy 1 unit</button>
+            <button class="btn ghost" id="niftySell">Sell 1 unit</button>
+          </div>
+        </div>
+        <div class="row muted"><span>Units</span><span id="niftyUnits" class="money">0</span></div>
+        <hr/>
+        <div class="row"><div><b>Real Estate</b><div class="muted">Rent + appreciation</div></div>
+          <div class="row" style="gap:8px">
+            <button class="btn secondary" id="reBuy">Buy Flat</button>
+            <button class="btn ghost" id="reSell">Sell Flat</button>
+          </div>
+        </div>
+        <div class="row muted"><span>Properties</span><span id="reUnits" class="money">0</span></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Businesses are injected here -->
+</div>
+
+<script>
+(() => {
+  /************ Utilities ************/
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const fmtINR=(n)=> {
+    const sign = n<0?"-":"";
+    n=Math.abs(n);
+    if (n>=1e12) return sign + "₹" + (n/1e12).toFixed(2) + " Lc Cr";
+    if (n>=1e9)  return sign + "₹" + (n/1e9).toFixed(2) + " Bn";
+    // Indian grouping (##,##,###)
+    const s = Math.floor(n).toString();
+    let r = s.slice(-3), l = s.slice(0, -3);
+    while (l.length>2){ r = l.slice(-2)+","+r; l = l.slice(0,-2); }
+    if (l) r = l + "," + r;
+    const dec = (n%1).toFixed(2).slice(1);
+    return sign + "₹" + r + dec;
+  };
+  const rd = (min,max)=>min + Math.random()*(max-min);
+
+  /************ State ************/
+  const state = {
+    cash: 5000,
+    gst: 0.10,
+    repo: 0.065,
+    tickPrice: 0,
+    goldPrice: 6100, // per gram
+    gold: 0, // grams
+    niftyPrice: 22000,
+    niftyUnits: 0,
+    fd: 0, // FD principal+interest
+    reUnits: 0,
+    rePrice: 7500000, // per flat
+    reRentYield: 0.035, // per year
+    businesses: {},
+    multipliers: {
+      global: 1,
+      food: 1,
+      retail: 1,
+      tech: 1,
+      media: 1,
+      sports: 1,
+      space: 1
+    },
+    events: [],
+    news: [],
+    bestNet: 0,
+    lastSave: Date.now(),
+    csrUntil: 0
+  };
+
+  const businesses = [
+    { id:'chai',  name:'Chai Stall', icon:'🫖', cat:'food', baseCost: 500,   baseRps: 3 },
+    { id:'dabba', name:'Dabba Service', icon:'🥡', cat:'food', baseCost: 6000, baseRps: 28 },
+    { id:'auto',  name:'Auto-rickshaw Fleet', icon:'🛺', cat:'retail', baseCost: 60000, baseRps: 210 },
+    { id:'kirana',name:'Kirana Store', icon:'🏪', cat:'retail', baseCost: 400000, baseRps: 1100 },
+    { id:'it',    name:'IT Services', icon:'💻', cat:'tech', baseCost: 2000000, baseRps: 5200 },
+    { id:'saas',  name:'SaaS Startup', icon:'🧠', cat:'tech', baseCost: 12000000, baseRps: 23000 },
+    { id:'studio',name:'Film Studio', icon:'🎬', cat:'media', baseCost: 80000000, baseRps: 120000 },
+    { id:'ipl',   name:'Cricket Franchise', icon:'🏏', cat:'sports', baseCost: 600000000, baseRps: 740000 },
+    { id:'space', name:'Space Startup', icon:'🚀', cat:'space', baseCost: 3500000000, baseRps: 2600000 },
+  ];
+  const bizGrowth = 1.15; // cost multiplier per level
+
+  // Build business UI
+  const bizList = document.getElementById('bizList');
+  const bizEls = {};
+  businesses.forEach(b=>{
+    state.businesses[b.id] = { level:0 };
+    const el = document.createElement('div');
+    el.className='biz';
+    el.innerHTML = `
+      <div class="ic">${b.icon}</div>
+      <div>
+        <div class="row"><b>${b.name}</b><span class="muted" id="${b.id}-lvl">Lvl 0</span></div>
+        <div class="muted" id="${b.id}-rps">+₹0/sec</div>
+        <div class="progress" style="margin-top:6px"><span id="${b.id}-bar" style="width:0%"></span></div>
+      </div>
+      <div class="row" style="flex-direction:column; gap:6px">
+        <button class="btn" id="${b.id}-buy">Buy</button>
+        <div class="muted" id="${b.id}-cost">Cost: ₹0</div>
+      </div>
+    `;
+    bizList.appendChild(el);
+    bizEls[b.id] = {
+      lvl: el.querySelector(`#${b.id}-lvl`),
+      rps: el.querySelector(`#${b.id}-rps`),
+      bar: el.querySelector(`#${b.id}-bar`),
+      cost: el.querySelector(`#${b.id}-cost`),
+      buy: el.querySelector(`#${b.id}-buy`)
+    };
+    bizEls[b.id].buy.addEventListener('click', ()=>buyBiz(b.id));
+  });
+
+  /************ DOM refs ************/
+  const cashEl = document.getElementById('cash');
+  const netEl  = document.getElementById('net');
+  const rpsEl  = document.getElementById('rps');
+  const gstEl  = document.getElementById('gst');
+  const repoEl = document.getElementById('repo');
+  const goldPEl= document.getElementById('goldP');
+  const niftyPEl= document.getElementById('niftyP');
+  const newsEl = document.getElementById('news');
+  const bestEl = document.getElementById('best');
+  const milestoneLabel = document.getElementById('milestoneLabel');
+  const milestoneBar   = document.getElementById('milestoneBar');
+  const activeEventsEl = document.getElementById('activeEvents');
+
+  // Investment buttons
+  fdDep.onclick=()=>depositFD(100000);
+  fdWit.onclick=()=>withdrawFD(100000);
+  goldBuy.onclick=()=>buyGold(10);
+  goldSell.onclick=()=>sellGold(10);
+  niftyBuy.onclick=()=>buyNifty(1);
+  niftySell.onclick=()=>sellNifty(1);
+  reBuy.onclick=()=>buyRE(1);
+  reSell.onclick=()=>sellRE(1);
+
+  saveBtn.onclick=saveGame;
+  resetBtn.onclick=()=>{ if(confirm("This will erase your progress. Continue?")){ localStorage.removeItem('bharat_billionaire_save'); location.reload(); } };
+  hustleBtn.onclick=()=>hustle();
+  csrBtn.onclick=()=>doCSR();
+
+  /************ Economics ************/
+  function bizCost(bid, lvlNext=null){
+    const b = businesses.find(x=>x.id===bid);
+    const lvl = (lvlNext==null) ? state.businesses[bid].level + 1 : lvlNext;
+    return Math.round(b.baseCost * Math.pow(bizGrowth, lvl-1));
+  }
+  function bizIncomePerSec(bid){
+    const b = businesses.find(x=>x.id===bid);
+    const lvl = state.businesses[bid].level;
+    if (!lvl) return 0;
+    const catMul = state.multipliers[b.cat] || 1;
+    let income = b.baseRps * lvl * state.multipliers.global * catMul;
+    // CSR temporary boost (+10%)
+    if (Date.now() < state.csrUntil) income *= 1.10;
+    // GST reduces take-home by gst rate
+    income *= (1 - state.gst);
+    return income;
+  }
+  function totalRps(){
+    return businesses.reduce((acc,b)=>acc + bizIncomePerSec(b.id), 0);
+  }
+
+  // FD compounds with repo rate (approx continuous)
+  function updateFD(dt){
+    if (state.fd<=0) return;
+    const yearly = state.repo + 0.01; // bank offers repo + 1%
+    const ratePerSec = yearly / (365*24*3600);
+    state.fd *= (1 + ratePerSec*dt);
+  }
+
+  // Gold/NIFTY random walk (Geometric-ish)
+  function updateMarket(dt){
+    const t = dt;
+    // Gold
+    let muG = 0.04, sigmaG = 0.15;
+    state.goldPrice = Math.max(1200, state.goldPrice * (1 + muG*t + rd(-sigmaG,sigmaG)*Math.sqrt(t)));
+    // NIFTY
+    let muN = 0.06, sigmaN = 0.20;
+    state.niftyPrice = Math.max(5000, state.niftyPrice * (1 + muN*t + rd(-sigmaN,sigmaN)*Math.sqrt(t)));
+    // Real Estate slow appreciation
+    state.rePrice *= (1 + (0.06/ (365*24*3600)) * dt);
+  }
+
+  // Rent income from real estate
+  function updateRent(dt){
+    if (state.reUnits<=0) return;
+    const rentPerSec = state.rePrice * state.reRentYield / (365*24*3600);
+    state.cash += rentPerSec * state.reUnits * dt;
+  }
+
+  // Event system
+  const eventDefs = {
+    festive: { name:"Festive Season (Diwali)", dur:45, start(){
+      state.multipliers.food*=1.2; state.multipliers.retail*=1.2; pushNews("🎆 Festive season boosts retail & food revenues! (+20%)");
+    }, end(){
+      state.multipliers.food/=1.2; state.multipliers.retail/=1.2; pushNews("🎇 Festive boost ends.");
+    }},
+    rbiHike: { name:"RBI Rate Hike", dur:40, start(){
+      state.repo += 0.005 + Math.random()*0.01;
+      pushNews("🏦 RBI hikes repo rate — FD yields up, borrowing dearer.");
+    }, end(){
+      pushNews("🏦 RBI settles. Repo now " + (state.repo*100).toFixed(2) + "%.");
+    }},
+    rbiCut: { name:"RBI Rate Cut", dur:40, start(){
+      state.repo = Math.max(0.03, state.repo - (0.005 + Math.random()*0.01));
+      pushNews("🏦 RBI cuts repo rate — growth push! FD yields trimmed.");
+    }, end(){
+      pushNews("🏦 RBI update. Repo now " + (state.repo*100).toFixed(2) + "%.");
+    }},
+    budget: { name:"Union Budget", dur:1, start(){
+      const delta = rd(-0.02, 0.02);
+      state.gst = clamp(state.gst + delta, 0.05, 0.18);
+      pushNews(`📜 Union Budget tweaks indirect taxes. GST now ${(state.gst*100).toFixed(1)}%.`);
+    }, end(){}},
+    startupHype: { name:"Startup Hype", dur:50, start(){
+      state.multipliers.tech*=1.25; pushNews("🚀 Startup hype! Tech revenues +25% for a while.");
+    }, end(){
+      state.multipliers.tech/=1.25; pushNews("💤 Hype cools off.");
+    }},
+    monsoon: { name:"Good Monsoon", dur:40, start(){
+      state.multipliers.food*=1.15; pushNews("🌧️ Good monsoon lifts consumption. Food +15%.");
+    }, end(){
+      state.multipliers.food/=1.15; pushNews("🌤️ Monsoon effect fades.");
+    }}
+  };
+
+  function maybeTriggerEvent(dt){
+    // try ~ once every ~30s on average
+    if (Math.random() < dt/30){
+      const keys = Object.keys(eventDefs);
+      const key = keys[Math.floor(Math.random()*keys.length)];
+      triggerEvent(key);
+    }
+  }
+  function triggerEvent(key){
+    const def = eventDefs[key]; if (!def) return;
+    const e = { key, name:def.name, ends: Date.now() + def.dur*1000 };
+    def.start(); state.events.push(e); renderEvents();
+  }
+  function updateEvents(){
+    const now=Date.now();
+    const still=[];
+    for (const e of state.events){
+      if (now >= e.ends){
+        eventDefs[e.key]?.end();
+      } else still.push(e);
+    }
+    state.events = still;
+    renderEvents();
+  }
+  function renderEvents(){
+    activeEventsEl.innerHTML = state.events.map(e=>`<span class="pill">⏱ ${e.name}</span>`).join(' ');
+  }
+  function pushNews(msg){
+    newsEl.textContent = msg;
+  }
+
+  /************ Actions ************/
+  function buyBiz(bid){
+    const cost = bizCost(bid);
+    if (state.cash < cost) return beepBad();
+    state.cash -= cost;
+    state.businesses[bid].level++;
+    beepGood();
+    updateBizUI(bid);
+    updateTopUI();
+  }
+
+  let hustleCooldown=0;
+  function hustle(){
+    const now = performance.now();
+    if (now < hustleCooldown) return;
+    hustleCooldown = now + 150;
+    const amt = 50 * (1 + (Date.now()<state.csrUntil ? 0.1:0));
+    state.cash += amt;
+    pushNews(`💪 Hustle earned ${fmtINR(amt)}.`);
+    beepClick();
+    updateTopUI();
+  }
+
+  function doCSR(){
+    const cost = 10000000; // 1 Cr
+    if (state.cash < cost) return beepBad();
+    state.cash -= cost;
+    state.csrUntil = Date.now() + 2*60*1000; // 2 min boost
+    pushNews("🎓 CSR: Built a school! Reputation up, +10% business income for 2 minutes.");
+    updateTopUI();
+  }
+
+  // FD
+  function depositFD(amount){
+    if (state.cash<amount) return beepBad();
+    state.cash-=amount; state.fd+=amount; beepGood(); updateTopUI();
+  }
+  function withdrawFD(amount){
+    const take = Math.min(amount, state.fd);
+    if (take<=0) return beepBad();
+    state.fd-=take; state.cash+=take; beepClick(); updateTopUI();
+  }
+
+  // Gold
+  function buyGold(grams){
+    const cost = grams*state.goldPrice;
+    if (state.cash<cost) return beepBad();
+    state.cash-=cost; state.gold+=grams; beepGood(); updateTopUI();
+  }
+  function sellGold(grams){
+    const qty = Math.min(grams, state.gold);
+    if (qty<=0) return beepBad();
+    state.gold-=qty; state.cash+=qty*state.goldPrice; beepClick(); updateTopUI();
+  }
+
+  // NIFTY
+  function buyNifty(units){
+    const cost = units*state.niftyPrice;
+    if (state.cash<cost) return beepBad();
+    state.cash-=cost; state.niftyUnits+=units; beepGood(); updateTopUI();
+  }
+  function sellNifty(units){
+    const qty = Math.min(units, state.niftyUnits);
+    if (qty<=0) return beepBad();
+    state.niftyUnits-=qty; state.cash+=qty*state.niftyPrice; beepClick(); updateTopUI();
+  }
+
+  // Real estate
+  function buyRE(n){
+    const cost = n*state.rePrice;
+    if (state.cash<cost) return beepBad();
+    state.cash-=cost; state.reUnits+=n; beepGood(); updateTopUI();
+  }
+  function sellRE(n){
+    const qty = Math.min(n, state.reUnits);
+    if (qty<=0) return beepBad();
+    state.reUnits-=qty; state.cash+=qty*state.rePrice; beepClick(); updateTopUI();
+  }
+
+  /************ Audio SFX (pure WebAudio) ************/
+  let audioCtx; let muted=false;
+  function ensureCtx(){ if (!audioCtx) try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch{} }
+  function tone(f=660,d=0.07,t='triangle',v=0.12){ if(muted) return; ensureCtx(); if(!audioCtx) return;
+    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+    o.type=t; o.frequency.value=f; g.gain.value=v; o.connect(g); g.connect(audioCtx.destination); o.start(); setTimeout(()=>o.stop(), d*1000);
+  }
+  const beepGood=()=>tone(880,0.09,'square',0.14);
+  const beepBad=()=>tone(200,0.18,'sawtooth',0.18);
+  const beepClick=()=>tone(640,0.05,'triangle',0.12);
+
+  /************ Loop ************/
+  let last = performance.now();
+  function loop(now){
+    const dt = Math.min(0.25, (now-last)/1000); last = now;
+
+    // business income
+    const rps = totalRps();
+    state.cash += rps * dt;
+
+    // markets & FD & rent
+    updateMarket(dt);
+    updateFD(dt);
+    updateRent(dt);
+
+    // events
+    updateEvents();
+    maybeTriggerEvent(dt);
+
+    // UI
+    updateTopUI();
+
+    requestAnimationFrame(loop);
+  }
+
+  /************ UI updates ************/
+  function updateBizUI(bid){
+    const b = businesses.find(x=>x.id===bid);
+    const el = bizEls[bid];
+    const lvl = state.businesses[bid].level;
+    el.lvl.textContent = `Lvl ${lvl}`;
+    el.rps.textContent = `+${fmtINR(b.baseRps * Math.max(1,lvl) * state.multipliers.global)} / sec`;
+    el.cost.textContent = `Cost: ${fmtINR(bizCost(bid))}`;
+    const prog = Math.min(100, (lvl/(lvl+1))*100); // visual only
+    el.bar.style.width = prog + "%";
+    el.buy.disabled = (state.cash < bizCost(bid));
+  }
+  function updateAllBizUI(){ businesses.forEach(b=>updateBizUI(b.id)); }
+
+  function updateTopUI(){
+    // Top chips
+    cashEl.textContent = fmtINR(state.cash);
+    rpsEl.textContent = fmtINR(totalRps());
+    gstEl.textContent = (state.gst*100).toFixed(1)+"%";
+    repoEl.textContent = (state.repo*100).toFixed(2)+"%";
+    goldPEl.textContent = fmtINR(state.goldPrice);
+    niftyPEl.textContent = fmtINR(state.niftyPrice);
+
+    // Investment stats
+    document.getElementById('fdBal').textContent = fmtINR(state.fd);
+    document.getElementById('goldHold').textContent = `${state.gold.toFixed(0)} g`;
+    document.getElementById('niftyUnits').textContent = state.niftyUnits.toFixed(0);
+    document.getElementById('reUnits').textContent = state.reUnits.toFixed(0);
+
+    // Net worth
+    const net = calcNetWorth();
+    netEl.textContent = fmtINR(net);
+    if (net > state.bestNet){ state.bestNet = net; bestEl.textContent = fmtINR(net); }
+
+    // Milestone progress
+    const ms = nextMilestone(net);
+    milestoneLabel.textContent = `${ms.name} (${fmtINR(ms.target)})`;
+    milestoneBar.style.width = clamp((net/ms.target)*100, 0, 100) + "%";
+
+    // Business buttons
+    updateAllBizUI();
+  }
+
+  function calcNetWorth(){
+    return state.cash + state.fd + state.gold*state.goldPrice + state.niftyUnits*state.niftyPrice + state.reUnits*state.rePrice;
+  }
+
+  const milestones = [
+    { name:"Lakhpati",  target: 100000 },
+    { name:"Crorepati", target: 10000000 },
+    { name:"Deca-Crore",target: 100000000 },
+    { name:"INR Billionaire (₹100 Cr)", target: 1000000000 },
+    { name:"Dollar Billionaire (~₹8000 Cr)", target: 80000000000 },
+  ];
+  function nextMilestone(net){
+    for (const m of milestones){ if (net < m.target) return m; }
+    return { name:"Legend of Bharat", target: calcNetWorth()+1 };
+  }
+
+  /************ Save / Load / Offline catch-up ************/
+  function saveGame(){
+    const save = JSON.stringify({ v:1, state, time: Date.now() });
+    try{ localStorage.setItem('bharat_billionaire_save', save); pushNews("💾 Game saved."); beepClick(); }catch{}
+  }
+  function loadGame(){
+    try{
+      const raw=localStorage.getItem('bharat_billionaire_save'); if (!raw) return;
+      const data=JSON.parse(raw);
+      if (data && data.state){
+        Object.assign(state, data.state);
+        // ensure new fields
+        state.multipliers = Object.assign({global:1,food:1,retail:1,tech:1,media:1,sports:1,space:1}, state.multipliers||{});
+        // offline progress
+        const dt = Math.min(3600*12, (Date.now() - (data.time||Date.now()))/1000);
+        if (dt>1){
+          state.cash += totalRps()*dt; // passive income
+          state.fd *= (1 + (state.repo+0.01) * (dt/(365*24*3600)));
+          state.cash += state.reUnits * state.rePrice * state.reRentYield * (dt/(365*24*3600));
+          pushNews(`⏰ Offline earnings added for ${(dt/3600).toFixed(1)}h.`);
+        }
+      }
+    }catch(e){ console.warn(e); }
+  }
+
+  window.addEventListener('beforeunload', saveGame);
+  setInterval(saveGame, 20000);
+
+  /************ Init ************/
+  loadGame();
+  updateAllBizUI();
+  updateTopUI();
+  requestAnimationFrame(loop);
+
+  // Periodic: enable/disable buy buttons based on cash
+  setInterval(()=>updateAllBizUI(), 500);
+  // Periodic: re-render events list (timer pills)
+  setInterval(()=>renderEvents(), 1000);
+
+  // Theme toggle functionality
+  const themeToggle = document.getElementById('themeToggle');
+  const body = document.body;
+  
+  themeToggle.addEventListener('click', () => {
+    const currentTheme = body.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    body.setAttribute('data-theme', newTheme);
+    
+    const icon = themeToggle.querySelector('i');
+    icon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    
+    localStorage.setItem('billionaire-theme', newTheme);
+  });
+
+  // Load saved theme
+  const savedTheme = localStorage.getItem('billionaire-theme') || 'dark';
+  body.setAttribute('data-theme', savedTheme);
+  const icon = themeToggle.querySelector('i');
+  icon.className = savedTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+
+  // Accessibility: space to hustle
+  window.addEventListener('keydown', (e)=>{ if(e.code==='Space') { e.preventDefault(); hustle(); } });
+
+})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+    <!-- Technology Information Section -->
+    <div class="tech-info-section" style="position: fixed; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 1rem; border: 1px solid rgba(255, 255, 255, 0.2); z-index: 1000; max-width: 200px;">
+        <h4 style="color: #ffffff; margin: 0 0 0.5rem 0; font-size: 0.9rem; text-align: center;">Built With</h4>
+        <div class="tech-logos" style="display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" title="HTML5" style="width: 24px; height: 24px; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" title="CSS3" style="width: 24px; height: 24px; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" title="JavaScript" style="width: 24px; height: 24px; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+        </div>
+        <div style="text-align: center;">
+            <a href="info/billionaire-tycoon-info.html" style="color: #4a90e2; text-decoration: none; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.5rem; border-radius: 8px; background: rgba(74, 144, 226, 0.2); transition: all 0.3s ease;" onmouseover="this.style.background='rgba(74, 144, 226, 0.3)'" onmouseout="this.style.background='rgba(74, 144, 226, 0.2)'">
+                <i class="fas fa-info-circle"></i> Documentation
+            </a>
+        </div>
+    </div>
+
+<script>
+// Theme toggle functionality
+const themeToggle = document.getElementById('themeToggle');
+const body = document.body;
+
+themeToggle.addEventListener('click', () => {
+  const currentTheme = body.getAttribute('data-theme');
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  body.setAttribute('data-theme', newTheme);
+  
+  const icon = themeToggle.querySelector('i');
+  icon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+  
+  localStorage.setItem('billionaire-theme', newTheme);
+});
+
+// Load saved theme
+const savedTheme = localStorage.getItem('billionaire-theme') || 'dark';
+body.setAttribute('data-theme', savedTheme);
+const icon = themeToggle.querySelector('i');
+icon.className = savedTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+</script>
+
+</body>
+</html>

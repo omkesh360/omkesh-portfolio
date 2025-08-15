@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Tetris Bharat - Omkesh Narwade</title>
+<style>
+  /* Theme variables (kept & slightly adapted from user's theme) */
+  :root{
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #1a1a1a;
+    --bg-tertiary: #2a2a2a;
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --accent-primary: #6366f1;
+    --accent-secondary: #8b5cf6;
+    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --glass-bg: rgba(255,255,255,0.08);
+    --glass-bg-strong: rgba(255,255,255,0.12);
+    --glass-border: rgba(255,255,255,0.15);
+    --blur-amount: 20px;
+    --saffron: #ff9933;
+    --white: #ffffff;
+    --green: #138808;
+    --game-bg: linear-gradient(180deg, #1e293b 0%, #334155 50%, #475569 100%);
+    --transition-normal: 0.3s ease;
+    --shadow-dark: rgba(0, 0, 0, 0.3);
+  }
+
+  [data-theme="light"] {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --glass-bg: rgba(255,255,255,0.92);
+    --glass-bg-strong: rgba(255,255,255,0.95);
+    --glass-border: rgba(0,0,0,0.08);
+    --game-bg: linear-gradient(180deg, #e0f2fe 0%, #b3e5fc 50%, #81d4fa 100%);
+    --shadow-dark: rgba(0,0,0,0.08);
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;padding:0;overflow:hidden;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;background:var(--bg-primary);color:var(--text-primary)}
+  #stage { position: fixed; inset: 0; background: var(--game-bg); display:block; }
+  .hud{ position: fixed; inset: 0; pointer-events: none; }
+  .score { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 20px; font-weight:800; background:var(--glass-bg); backdrop-filter: blur(var(--blur-amount)); border-radius:999px; color:var(--text-primary); border:1px solid var(--glass-border); box-shadow:0 8px 32px var(--shadow-dark); pointer-events:auto; }
+  .level-indicator { position:absolute; top: 70px; left:50%; transform: translateX(-50%); padding:6px 12px; font-weight:600; font-size:14px; background:var(--glass-bg); border-radius:999px; color:var(--text-primary); box-shadow:0 4px 16px rgba(0,0,0,.1); pointer-events:auto; }
+  .controls { position:absolute; top:16px; right:16px; display:flex; gap:8px; pointer-events:auto; }
+  .btn{ appearance:none;border:0;cursor:pointer;padding:10px 16px;border-radius:12px;font-weight:700;background:var(--glass-bg);backdrop-filter: blur(var(--blur-amount));color:var(--text-primary);border:1px solid var(--glass-border);box-shadow: 0 8px 32px var(--shadow-dark);transition:all var(--transition-normal);}
+  .btn:hover{ transform: translateY(-2px); background: rgba(255,255,255,0.12);}
+  .btn:active{ transform: scale(.98); }
+  .overlay{ position: fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,.28); backdrop-filter: blur(2px); }
+  .panel{ width: min(92vw,520px); background:var(--glass-bg-strong); backdrop-filter: blur(var(--blur-amount)); border:1px solid var(--glass-border); border-radius:16px; padding:20px 22px; color:var(--text-primary); box-shadow: 0 24px 48px rgba(0,0,0,.25); text-align:center; }
+  .panel h1{ margin:0 0 6px; font-size: clamp(20px, 3.2vw, 28px); }
+  .difficulty-buttons{ margin:16px 0; display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+  .difficulty-btn{ background:var(--glass-bg); color:var(--text-primary); font-weight:600; border-radius:10px; padding:8px 14px; cursor:pointer; border:2px solid transparent; }
+  .difficulty-btn.active{ background:var(--saffron); color:#151515; border-color:#ff7700; }
+  .instructions{ margin:16px 0; padding:12px; background: rgba(255,255,255,0.05); border-radius:8px; font-size:14px; line-height:1.4; text-align:left;}
+  .stats{ margin:16px 0; display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .stat-item{ padding:8px; background: rgba(255,255,255,0.05); border-radius:8px; font-size:12px; }
+  .stat-value{ font-weight:800; font-size:16px; color:var(--accent-primary); }
+
+  /* side panels for next/hold */
+  .side-ui { position: absolute; right: 22px; top: 120px; width: 180px; pointer-events: auto; display:flex; gap:12px; flex-direction:column; }
+  .card{ padding:12px; background:var(--glass-bg); border-radius:12px; border:1px solid var(--glass-border); text-align:center; }
+  .preview-canvas{ width:100%; height:100px; display:block; background:transparent; }
+
+  /* universal text visibility */
+  h1,h2,h3,h4,h5,h6{ color:var(--text-primary) !important; text-shadow:0 1px 3px rgba(0,0,0,.08) }
+  p,span,label{ color:var(--text-primary) !important; }
+
+  /* small responsive tweaks */
+  @media (max-width:720px){
+    .side-ui { position: fixed; right: 8px; top: 140px; width: 140px; }
+    .score{ left: 50%; transform: translateX(-50%); top: 10px; padding:8px 12px; font-size:14px; }
+  }
+</style>
+</head>
+<body data-theme="dark">
+
+<a href="../projects.html" class="go-projects-btn" style="position: fixed; top: 20px; left: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.6rem 1rem; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 0.85rem; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); z-index: 1000;">Projects</a>
+
+<button id="themeToggle" style="position: fixed; top: 80px; left: 20px; background: var(--glass-bg); backdrop-filter: blur(var(--blur-amount)); border:1px solid var(--glass-border); border-radius:50%; width:50px; height:50px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .3s ease; color:var(--text-primary); font-size:1.2rem; z-index:1000;">
+  <span id="themeIcon">🌙</span>
+</button>
+
+<canvas id="stage"></canvas>
+
+<div class="hud">
+  <div class="score" id="score">Score: 0 • Best: 0</div>
+  <div class="level-indicator" id="levelIndicator">Easy</div>
+  <div class="controls">
+    <button class="btn" id="pauseBtn" title="Pause/Resume (P)">Pause</button>
+    <button class="btn" id="muteBtn" title="Mute/Unmute (M)">Mute</button>
+  </div>
+  <div class="side-ui">
+    <div class="card">
+      <div style="font-weight:700; margin-bottom:8px;">Next</div>
+      <canvas id="nextPreview" class="preview-canvas" width="160" height="100"></canvas>
+    </div>
+    <div class="card">
+      <div style="font-weight:700; margin-bottom:8px;">Hold</div>
+      <canvas id="holdPreview" class="preview-canvas" width="160" height="100"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="startOv">
+  <div class="panel">
+    <h1>Tetris Bharat</h1>
+    <p>Stack the tetrominoes and clear lines. Avoid overflow.</p>
+
+    <div class="instructions">
+      <h3>How to Play</h3>
+      <ul>
+        <li>Arrow keys / WASD - Move pieces</li>
+        <li>Up or X - Rotate clockwise; Z - Rotate counterclockwise</li>
+        <li>Space - Hard drop; Shift - Hold</li>
+        <li>P - Pause; M - Mute</li>
+      </ul>
+    </div>
+
+    <div class="difficulty-buttons">
+      <button class="difficulty-btn active" data-level="easy">Easy</button>
+      <button class="difficulty-btn" data-level="medium">Medium</button>
+      <button class="difficulty-btn" data-level="hard">Hard</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat-item"><div class="stat-value" id="easyBest">0</div><div>Easy Best</div></div>
+      <div class="stat-item"><div class="stat-value" id="mediumBest">0</div><div>Medium Best</div></div>
+      <div class="stat-item"><div class="stat-value" id="hardBest">0</div><div>Hard Best</div></div>
+    </div>
+
+    <div style="margin-top:12px;">
+      <button class="btn" id="startBtn" style="background:var(--accent-gradient); color:white; border:0;">Start Game</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overOv">
+  <div class="panel">
+    <h1>Game Over</h1>
+    <p id="finalLine">Score: 0</p>
+    <p id="achievementLine"></p>
+    <div style="margin-top:12px;">
+      <button class="btn" id="restartBtn" style="background:var(--accent-gradient); color:white; border:0; margin-right:8px;">Restart</button>
+      <button class="btn" id="menuBtn">Main Menu</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  /* Canvas and sizing */
+  const canvas = document.getElementById('stage');
+  const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
+
+  const nextCanvas = document.getElementById('nextPreview');
+  const nextCtx = nextCanvas.getContext('2d');
+  const holdCanvas = document.getElementById('holdPreview');
+  const holdCtx = holdCanvas.getContext('2d');
+
+  function fit() {
+    const dpr = Math.max(1, Math.min(2.5, window.devicePixelRatio || 1));
+    const w = window.innerWidth | 0, h = window.innerHeight | 0;
+    canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+    canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    // grid metrics recalculated below
+    metrics.recalc(w, h);
+  }
+  window.addEventListener('resize', fit);
+
+  /* HUD & UI elements */
+  const startOv = document.getElementById('startOv');
+  const overOv = document.getElementById('overOv');
+  const startBtn = document.getElementById('startBtn');
+  const restartBtn = document.getElementById('restartBtn');
+  const menuBtn = document.getElementById('menuBtn');
+  const scoreEl = document.getElementById('score');
+  const levelIndicator = document.getElementById('levelIndicator');
+  const pauseBtn = document.getElementById('pauseBtn');
+  const muteBtn = document.getElementById('muteBtn');
+  const finalLine = document.getElementById('finalLine');
+  const achievementLine = document.getElementById('achievementLine');
+  const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+  const easyBest = document.getElementById('easyBest');
+  const mediumBest = document.getElementById('mediumBest');
+  const hardBest = document.getElementById('hardBest');
+
+  /* Difficulty */
+  let currentDifficulty = 'easy';
+  const difficultySettings = {
+    easy: { gravity: 0.8, name:'Easy', baseSpeed: 1/48 },
+    medium: { gravity: 1.2, name:'Medium', baseSpeed: 1/36 },
+    hard: { gravity: 1.6, name:'Hard', baseSpeed: 1/24 }
+  };
+
+  /* Metrics and grid sizing */
+  const metrics = {
+    cols: 10, rows: 20, cell: 30, boardX:0, boardY:0, W:0, H:0,
+    recalc(w,h) {
+      // Keep a reasonable cell size based on smaller dimension
+      const maxCell = Math.max(18, Math.min(36, Math.floor(Math.min(w,h) / 28)));
+      this.cell = maxCell;
+      this.cols = 10;
+      this.rows = 20;
+      // center board
+      this.W = this.cols * this.cell;
+      this.H = this.rows * this.cell;
+      this.boardX = Math.floor((w - this.W) / 2);
+      this.boardY = Math.floor((h - this.H) / 2);
+    }
+  };
+
+  /* Audio (simple beeps) */
+  let audioCtx;
+  let muted = false;
+  function beep({f=440,dur=80,vol=0.08,type='sine'}) {
+    if (muted) return;
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = type;
+      o.frequency.value = f;
+      g.gain.value = vol;
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start();
+      setTimeout(()=>o.stop(), dur);
+    } catch (e) {}
+  }
+  const sfx = {
+    move: ()=>beep({f:600,dur:40,vol:0.05}),
+    rotate: ()=>beep({f:760,dur:60,vol:0.06}),
+    clear: ()=>beep({f:980,dur:120,vol:0.1,type:'triangle'}),
+    gameOver: ()=>beep({f:160,dur:400,vol:0.12,type:'sawtooth'}),
+    drop: ()=>beep({f:820,dur:40,vol:0.07})
+  };
+
+  /* Game state */
+  let grid = [];
+  let score = 0;
+  let linesCleared = 0;
+  let level = 1;
+  let best = { easy:0, medium:0, hard:0 };
+
+  try {
+    const saved = localStorage.getItem('tetris_bharat_best');
+    if (saved) best = {...best, ...JSON.parse(saved)};
+  } catch (e) {}
+
+  /* Tetromino definitions - using classic shapes */
+  const TETROMINOES = {
+    I: { color:'#00ffff', matrix:[ [0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0] ] },
+    J: { color:'#0000ff', matrix:[ [1,0,0],[1,1,1],[0,0,0] ] },
+    L: { color:'#ff7f00', matrix:[ [0,0,1],[1,1,1],[0,0,0] ] },
+    O: { color:'#ffff00', matrix:[ [1,1],[1,1] ] },
+    S: { color:'#00ff00', matrix:[ [0,1,1],[1,1,0],[0,0,0] ] },
+    T: { color:'#800080', matrix:[ [0,1,0],[1,1,1],[0,0,0] ] },
+    Z: { color:'#ff0000', matrix:[ [1,1,0],[0,1,1],[0,0,0] ] }
+  };
+
+  /* To reflect Indian theme, map some colors to saffron/white/green accents for a few pieces */
+  const INDIAN_MAP = {
+    I: '#138808', // green
+    J: '#ff9933', // saffron
+    L: '#ffffff', // white (outline will contrast)
+    O: '#ffd700',
+    S: '#8b5cf6',
+    T: '#6366f1',
+    Z: '#ff4d4d'
+  };
+
+  // Use INDIAN_MAP colors to preserve theme
+  Object.keys(TETROMINOES).forEach(k => {
+    TETROMINOES[k].color = INDIAN_MAP[k] || TETROMINOES[k].color;
+  });
+
+  /* Helper utilities */
+  function createEmptyGrid() {
+    const g = [];
+    for (let r=0;r<metrics.rows;r++){
+      g[r] = new Array(metrics.cols).fill(null);
+    }
+    return g;
+  }
+
+  function cloneMatrix(m){ return m.map(row=>row.slice()); }
+  function rotateMatrix(m) {
+    const N = m.length;
+    const res = Array.from({length:N},()=>Array(N).fill(0));
+    for(let r=0;r<N;r++){
+      for(let c=0;c<N;c++){
+        res[c][N-1-r] = m[r][c];
+      }
+    }
+    return res;
+  }
+
+  /* Piece management */
+  let bag = [];
+  function refillBag(){
+    bag = ['I','J','L','O','S','T','Z'];
+    // fisher-yates shuffle
+    for(let i=bag.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [bag[i],bag[j]]=[bag[j],bag[i]];
+    }
+  }
+  refillBag();
+
+  function nextFromBag(){ if(bag.length===0) refillBag(); return bag.shift(); }
+
+  let current = null; // { type, matrix, x,y, color }
+  let nextType = nextFromBag();
+  let holdType = null;
+  let holdLocked = false; // can't hold twice in a row
+  let dropTimer = 0;
+  let gravity = difficultySettings[currentDifficulty].baseSpeed;
+  let lastTime = 0;
+  let running = false;
+  let paused = false;
+  let raf = 0;
+
+  function spawnPiece(type){
+    const proto = TETROMINOES[type];
+    const mat = cloneMatrix(proto.matrix);
+    const w = mat[0].length;
+    const x = Math.floor((metrics.cols - w)/2);
+    const y = - (mat.length); // start above board
+    return { type, matrix: mat, x, y, color: proto.color };
+  }
+
+  function startGame(){
+    running = true; paused = false; startOv.style.display='none'; overOv.style.display='none';
+    grid = createEmptyGrid();
+    score = 0; linesCleared=0; level=1; holdType = null; holdLocked=false;
+    nextType = nextFromBag();
+    current = spawnPiece(nextFromBag());
+    updateHud();
+    lastTime = performance.now();
+    dropTimer = 0;
+    raf = requestAnimationFrame(loop);
+  }
+
+  function endGame(){
+    running = false; sfx.gameOver();
+    // update best
+    if (score > best[currentDifficulty]) {
+      best[currentDifficulty] = score;
+      try { localStorage.setItem('tetris_bharat_best', JSON.stringify(best)); } catch(e){}
+    }
+    finalLine.textContent = `Score: ${score} • Lines: ${linesCleared} • Best: ${best[currentDifficulty]}`;
+    achievementLine.textContent = linesCleared>=40 ? 'Marathon cleared' : '';
+    overOv.style.display = 'flex';
+    updateBestScores();
+  }
+
+  function lockPiece(){
+    const m = current.matrix;
+    for (let r=0;r<m.length;r++){
+      for (let c=0;c<m[r].length;c++){
+        if (m[r][c]) {
+          const gx = current.x + c;
+          const gy = current.y + r;
+          if (gy>=0 && gy<metrics.rows && gx>=0 && gx<metrics.cols){
+            grid[gy][gx] = { color: current.color };
+          } else if (gy < 0) {
+            // piece locks above top -> game over
+            return endGame();
+          }
+        }
+      }
+    }
+    // clear lines
+    clearLines();
+    // spawn next
+    holdLocked = false;
+    current = spawnPiece(nextType);
+    nextType = nextFromBag();
+    // collision immediate -> game over
+    if (collides(current.matrix, current.x, current.y)) {
+      endGame();
+    }
+  }
+
+  function collides(matrix, x, y){
+    for (let r=0;r<matrix.length;r++){
+      for (let c=0;c<matrix[r].length;c++){
+        if (!matrix[r][c]) continue;
+        const gx = x + c;
+        const gy = y + r;
+        if (gx < 0 || gx >= metrics.cols || gy >= metrics.rows) return true;
+        if (gy >= 0 && grid[gy][gx]) return true;
+      }
+    }
+    return false;
+  }
+
+  function clearLines(){
+    const rowsToClear = [];
+    for (let r=0;r<metrics.rows;r++){
+      if (grid[r].every(cell => cell !== null)) rowsToClear.push(r);
+    }
+    if(rowsToClear.length === 0) return;
+    // remove rows
+    for (const r of rowsToClear) grid.splice(r,1), grid.unshift(new Array(metrics.cols).fill(null));
+    // scoring: classic Tetris scoring (single=100, double=300, triple=500, tetris=800) * level
+    const scores = {1:100,2:300,3:500,4:800};
+    score += (scores[rowsToClear.length] || 0) * level;
+    linesCleared += rowsToClear.length;
+    // level up every 10 lines
+    const newLevel = Math.floor(linesCleared/10) + 1;
+    if (newLevel > level) level = newLevel;
+    sfx.clear();
+    updateHud();
+  }
+
+  function updateHud(){
+    const bestVal = best[currentDifficulty] || 0;
+    scoreEl.textContent = `Score: ${score} • Lines: ${linesCleared} • Best: ${bestVal}`;
+    levelIndicator.textContent = `${difficultySettings[currentDifficulty].name} • L${level}`;
+    updateBestScores();
+    drawPreview(nextCtx, nextType);
+    drawPreview(holdCtx, holdType);
+  }
+
+  function updateBestScores(){
+    easyBest.textContent = best.easy || 0;
+    mediumBest.textContent = best.medium || 0;
+    hardBest.textContent = best.hard || 0;
+  }
+
+  /* Movement and controls */
+  function moveCurrent(dx, dy){
+    if (!current) return;
+    const nx = current.x + dx;
+    const ny = current.y + dy;
+    if (!collides(current.matrix, nx, ny)){
+      current.x = nx; current.y = ny;
+      return true;
+    }
+    return false;
+  }
+
+  function hardDrop(){
+    if (!current) return;
+    while(moveCurrent(0,1)){}
+    sfx.drop();
+    lockPiece();
+    updateHud();
+  }
+
+  function rotateCurrent(dir=1){
+    if (!current) return;
+    const N = current.matrix.length;
+    let rotated = rotateMatrix(current.matrix);
+    if (dir === -1) {
+      // rotate CCW: rotate 3x CW
+      rotated = rotateMatrix(rotateMatrix(rotateMatrix(current.matrix)));
+    }
+    // basic wall kick attempts
+    const kicks = [0, -1, 1, -2, 2];
+    for (const k of kicks){
+      if (!collides(rotated, current.x + k, current.y)){
+        current.matrix = rotated;
+        current.x += k;
+        sfx.rotate();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function holdPiece(){
+    if (holdLocked || !current) return;
+    if (!holdType){
+      holdType = current.type;
+      current = spawnPiece(nextType);
+      nextType = nextFromBag();
+    } else {
+      const temp = holdType;
+      holdType = current.type;
+      current = spawnPiece(temp);
+    }
+    holdLocked = true;
+    updateHud();
+  }
+
+  /* Draw functions */
+  function drawBoard(){
+    // background
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.save();
+    // board area
+    const bx = metrics.boardX, by = metrics.boardY;
+    // draw background rect
+    ctx.fillStyle = 'rgba(255,255,255,0.03)';
+    roundRect(ctx, bx-6, by-6, metrics.W+12, metrics.H+12, 10, true, false);
+    // grid background
+    ctx.fillStyle = 'rgba(255,255,255,0.02)';
+    ctx.fillRect(bx, by, metrics.W, metrics.H);
+    // cells
+    for (let r=0;r<metrics.rows;r++){
+      for (let c=0;c<metrics.cols;c++){
+        const cell = grid[r][c];
+        const x = bx + c*metrics.cell;
+        const y = by + r*metrics.cell;
+        ctx.strokeStyle = 'rgba(0,0,0,0.06)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x, y, metrics.cell, metrics.cell);
+        if (cell){
+          drawCell(x, y, metrics.cell, cell.color);
+        }
+      }
+    }
+    // draw current falling piece
+    if (current){
+      const m=current.matrix;
+      for(let r=0;r<m.length;r++){
+        for(let c=0;c<m[r].length;c++){
+          if (!m[r][c]) continue;
+          const x = bx + (current.x + c)*metrics.cell;
+          const y = by + (current.y + r)*metrics.cell;
+          if (y>=by - metrics.cell*4) drawCell(x, y, metrics.cell, current.color);
+        }
+      }
+    }
+
+    // draw ghost piece (projection)
+    drawGhost();
+
+    ctx.restore();
+  }
+
+  function drawGhost(){
+    // shadow where piece would land
+    if (!current) return;
+    let gy = current.y;
+    while(!collides(current.matrix, current.x, gy+1)) gy++;
+    ctx.globalAlpha = 0.25;
+    for(let r=0;r<current.matrix.length;r++){
+      for(let c=0;c<current.matrix[r].length;c++){
+        if (!current.matrix[r][c]) continue;
+        const x = metrics.boardX + (current.x + c) * metrics.cell;
+        const y = metrics.boardY + (gy + r) * metrics.cell;
+        drawCell(x, y, metrics.cell, '#000000', true);
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function drawCell(x,y,size,color,isGhost=false){
+    // main rect
+    ctx.fillStyle = color;
+    ctx.fillRect(x+1, y+1, size-2, size-2);
+    // highlight
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.fillRect(x+2, y+2, (size-4), (size/3));
+    // border
+    ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x+1, y+1, size-2, size-2);
+    if (isGhost) {
+      ctx.fillStyle = 'rgba(255,255,255,0.03)';
+      ctx.fillRect(x+1, y+1, size-2, size-2);
+    }
+  }
+
+  function roundRect(ctx,x,y,w,h,r,fill,stroke){
+    if (typeof r==='undefined') r=5;
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r);
+    ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r);
+    ctx.arcTo(x,y,x+w,y,r);
+    ctx.closePath();
+    if (fill) ctx.fill();
+    if (stroke) ctx.stroke();
+  }
+
+  function drawPreview(pxCtx, type){
+    // clear
+    pxCtx.clearRect(0,0,pxCtx.canvas.width, pxCtx.canvas.height);
+    if (!type) return;
+    const piece = TETROMINOES[type];
+    const mat = piece.matrix;
+    const block = Math.floor(Math.min(pxCtx.canvas.width / mat[0].length, pxCtx.canvas.height / mat.length) * 0.8);
+    const offsetX = Math.floor((pxCtx.canvas.width - (block*mat[0].length))/2);
+    const offsetY = Math.floor((pxCtx.canvas.height - (block*mat.length))/2);
+    for (let r=0;r<mat.length;r++){
+      for (let c=0;c<mat[r].length;c++){
+        if (!mat[r][c]) continue;
+        const x = offsetX + c*block;
+        const y = offsetY + r*block;
+        // draw simple preview block
+        pxCtx.fillStyle = piece.color;
+        pxCtx.fillRect(x+2, y+2, block-4, block-4);
+        pxCtx.strokeStyle = 'rgba(0,0,0,0.35)';
+        pxCtx.lineWidth = 1;
+        pxCtx.strokeRect(x+2, y+2, block-4, block-4);
+      }
+    }
+  }
+
+  /* Main loop */
+  function loop(t){
+    if (!running) return;
+    if (paused) {
+      raf = requestAnimationFrame(loop);
+      return;
+    }
+    const dt = (t - lastTime) / 1000;
+    lastTime = t;
+    // gravity scaled with level and difficulty
+    const base = difficultySettings[currentDifficulty].baseSpeed;
+    const grav = base + (level - 1) * 0.02;
+    dropTimer += dt;
+
+    if (dropTimer >= grav){
+      // try move down
+      if (!moveCurrent(0,1)){
+        // lock if can't move
+        lockPiece();
+      }
+      dropTimer = 0;
+    }
+
+    // draw
+    drawBoard();
+    updateHud();
+    raf = requestAnimationFrame(loop);
+  }
+
+  /* Input handling */
+  const KEY_REPEAT_DELAY = 120; // ms between moves when holding
+  const keyState = {};
+  let lastKeyMove = 0;
+
+  window.addEventListener('keydown', (e) => {
+    if (!running && e.code === 'Space') { e.preventDefault(); startGame(); return; }
+    if (e.repeat) {
+      // allow some keys
+    } else {
+      handleKey(e.code, true);
+    }
+    e.preventDefault();
+  });
+
+  window.addEventListener('keyup', (e) => {
+    handleKey(e.code, false);
+    e.preventDefault();
+  });
+
+  function handleKey(code, down){
+    if (code === 'KeyP' && down) {
+      togglePause();
+      return;
+    }
+    if (code === 'KeyM' && down) {
+      muted = !muted; muteBtn.textContent = muted ? 'Unmute' : 'Mute';
+      return;
+    }
+    if (!running) return;
+    if (!down) return;
+
+    switch(code){
+      case 'ArrowLeft':
+      case 'KeyA': moveCurrent(-1,0); sfx.move(); break;
+      case 'ArrowRight':
+      case 'KeyD': moveCurrent(1,0); sfx.move(); break;
+      case 'ArrowDown':
+      case 'KeyS': moveCurrent(0,1); sfx.move(); break; // soft drop effect not timed here
+      case 'Space': hardDrop(); break;
+      case 'ArrowUp':
+      case 'KeyX': rotateCurrent(1); break;
+      case 'KeyZ': rotateCurrent(-1); break;
+      case 'ShiftLeft':
+      case 'ShiftRight': holdPiece(); break;
+    }
+  }
+
+  function togglePause(){
+    if (!running) return;
+    paused = !paused;
+    pauseBtn.textContent = paused ? 'Resume' : 'Pause';
+    if (!paused) {
+      lastTime = performance.now();
+      raf = requestAnimationFrame(loop);
+    }
+  }
+
+  /* UI listeners */
+  startBtn.addEventListener('click', startGame);
+  restartBtn.addEventListener('click', startGame);
+  menuBtn.addEventListener('click', ()=>{ running=false; overOv.style.display='none'; startOv.style.display='flex'; });
+  pauseBtn.addEventListener('click', togglePause);
+  muteBtn.addEventListener('click', ()=>{ muted = !muted; muteBtn.textContent = muted ? 'Unmute' : 'Mute'; });
+
+  // Difficulty selection
+  difficultyBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      difficultyBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentDifficulty = btn.dataset.level;
+      // update gravity speeds (affects spawn)
+
+      // If running, adapt gravity slightly
+      updateHud();
+    });
+  });
+
+  // theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  const themeIcon = document.getElementById('themeIcon');
+  themeToggle.addEventListener('click', () => {
+    const body = document.body;
+    const cur = body.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    body.setAttribute('data-theme', next);
+    themeIcon.textContent = next === 'dark' ? '🌙' : '☀️';
+    localStorage.setItem('tetris-theme', next);
+  });
+  const savedTheme = localStorage.getItem('tetris-theme') || 'dark';
+  document.body.setAttribute('data-theme', savedTheme);
+  themeIcon.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+
+  // helpers for best scores
+  function updateBestScores(){
+    easyBest.textContent = best.easy || 0;
+    mediumBest.textContent = best.medium || 0;
+    hardBest.textContent = best.hard || 0;
+  }
+
+  /* Initialize sizes & preview */
+  fit();
+  updateBestScores();
+  startOv.style.display = 'flex';
+
+  // ensure a ready next and current when starting
+  nextType = nextType || nextFromBag();
+  current = null;
+
+  // expose a small debug helper to quickly start
+  window.__start = startGame;
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Snake Bharat - Omkesh Narwade</title>
+<style>
+  /* Optimized CSS Variables for Theme Management */
+  :root{
+    /* Dark Theme (Default) */
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #1a1a1a;
+    --bg-tertiary: #2a2a2a;
+    --bg-quaternary: #3a3a3a;
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --text-muted: #666666;
+    --text-inverse: #1a202c;
+    
+    /* Accent Colors */
+    --accent-primary: #6366f1;
+    --accent-secondary: #8b5cf6;
+    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --accent-hover: #5855eb;
+    
+    /* Glass Effects - Enhanced for better text visibility */
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-bg-strong: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --glass-border-strong: rgba(255, 255, 255, 0.2);
+    --glass-hover: rgba(255, 255, 255, 0.15);
+    
+    /* Shadows */
+    --shadow-light: rgba(255, 255, 255, 0.1);
+    --shadow-dark: rgba(0, 0, 0, 0.3);
+    --shadow-strong: rgba(0, 0, 0, 0.5);
+    --shadow-subtle: rgba(0, 0, 0, 0.1);
+    
+    /* Effects */
+    --blur-amount: 20px;
+    --blur-strong: 30px;
+    --blur-subtle: 10px;
+    
+    /* Brand Colors */
+    --saffron: #ff9933;
+    --white: #ffffff;
+    --green: #138808;
+    --blue: #0a3d91;
+    
+    /* Status Colors */
+    --success: #10b981;
+    --success-bg: rgba(16, 185, 129, 0.1);
+    --error: #ef4444;
+    --error-bg: rgba(239, 68, 68, 0.1);
+    --warning: #f59e0b;
+    --warning-bg: rgba(245, 158, 11, 0.1);
+    --info: #3b82f6;
+    --info-bg: rgba(59, 130, 246, 0.1);
+    
+    /* Interactive States */
+    --hover-lift: translateY(-2px);
+    --active-scale: scale(0.98);
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* Game-specific colors */
+    --game-bg: linear-gradient(180deg, #1e293b 0%, #334155 50%, #475569 100%);
+  }
+
+  [data-theme="light"] {
+    /* Light Theme Overrides */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #e2e8f0;
+    --bg-quaternary: #cbd5e1;
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --text-inverse: #ffffff;
+    
+    /* Glass Effects for Light Theme - Enhanced for better text visibility */
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-bg-strong: rgba(255, 255, 255, 0.95);
+    --glass-border: rgba(0, 0, 0, 0.1);
+    --glass-border-strong: rgba(0, 0, 0, 0.15);
+    --glass-hover: rgba(255, 255, 255, 0.95);
+    
+    /* Shadows for Light Theme */
+    --shadow-light: rgba(255, 255, 255, 0.8);
+    --shadow-dark: rgba(0, 0, 0, 0.08);
+    --shadow-strong: rgba(0, 0, 0, 0.15);
+    --shadow-subtle: rgba(0, 0, 0, 0.05);
+    
+    /* Effects */
+    --blur-amount: 15px;
+    --blur-strong: 25px;
+    --blur-subtle: 8px;
+    
+    /* Status Colors for Light Theme */
+    --success-bg: rgba(16, 185, 129, 0.15);
+    --error-bg: rgba(239, 68, 68, 0.15);
+    --warning-bg: rgba(245, 158, 11, 0.15);
+    --info-bg: rgba(59, 130, 246, 0.15);
+    
+    /* Game-specific colors for light theme */
+    --game-bg: linear-gradient(180deg, #e0f2fe 0%, #b3e5fc 50%, #81d4fa 100%);
+  }
+  
+  * { box-sizing: border-box; }
+  html, body {
+    height: 100%; margin: 0; padding: 0; overflow: hidden;
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg-primary);
+  }
+  
+  #stage {
+    position: fixed; inset: 0; display:block; 
+    background: var(--game-bg);
+    transition: background var(--transition-normal);
+  }
+
+  /* HUD */
+  .hud {
+    position: fixed; inset: 0; pointer-events: none;
+  }
+  .score {
+    position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+    padding: 12px 20px; font-weight: 800; letter-spacing:.3px;
+    background: var(--glass-bg); backdrop-filter: blur(var(--blur-amount)); border-radius: 999px; 
+    color: var(--text-primary); border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px var(--shadow-dark);
+    pointer-events: auto;
+  }
+  .level-indicator {
+    position: absolute; top: 70px; left: 50%; transform: translateX(-50%);
+    padding: 6px 12px; font-weight: 600; font-size: 14px;
+    background: var(--glass-bg); border-radius: 999px; color: var(--text-primary);
+    box-shadow: 0 4px 16px rgba(0,0,0,.1);
+    pointer-events: auto;
+  }
+  .controls {
+    position: absolute; top: 16px; right: 16px; display: flex; gap: 8px; pointer-events: auto;
+  }
+  .btn {
+    appearance: none; border: 0; cursor: pointer;
+    padding: 10px 16px; border-radius: 12px; font-weight:700;
+    background: var(--glass-bg); backdrop-filter: blur(var(--blur-amount)); color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px var(--shadow-dark);
+    transition: all 0.3s ease;
+  }
+  .btn:hover {
+    transform: var(--hover-lift);
+    background: var(--glass-hover);
+  }
+  .btn:active { 
+    transform: var(--active-scale); 
+  }
+
+  /* Overlays */
+  .overlay {
+    position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+    background: rgba(0,0,0,.28); backdrop-filter: blur(2px);
+  }
+  .panel {
+    width: min(92vw, 520px); background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border);
+    border-radius: 16px; padding: 20px 22px; color: var(--text-primary);
+    box-shadow: 0 24px 48px rgba(0,0,0,.25);
+    text-align: center;
+  }
+  .panel h1 { margin: 0 0 6px; font-size: clamp(20px, 3.2vw, 28px); }
+  .panel p { margin: 6px 0; color: var(--text-secondary); }
+  .panel .actions { margin-top: 12px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .difficulty-buttons { margin: 16px 0; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .difficulty-btn {
+    background: var(--glass-bg); color: var(--text-primary); font-weight: 600; border: 2px solid transparent;
+    border-radius: 10px; padding: 8px 14px; cursor: pointer; transition: all 0.2s;
+  }
+  .difficulty-btn.active {
+    background: var(--saffron); color: #151515; border-color: #ff7700;
+  }
+  .difficulty-btn:hover {
+    transform: translateY(-1px);
+  }
+  .cta {
+    background: var(--accent-gradient); color: white; font-weight:800; border:0; border-radius:12px;
+    padding:10px 16px; cursor:pointer; box-shadow: 0 10px 24px rgba(99, 102, 241, 0.3);
+    transition: all var(--transition-normal);
+  }
+  .cta:hover {
+    transform: var(--hover-lift);
+    box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
+  }
+  .cta:active {
+    transform: var(--active-scale);
+  }
+  .ghost {
+    background: var(--glass-bg); color: var(--text-primary);
+  }
+
+  /* Instructions */
+  .instructions {
+    margin: 16px 0; padding: 12px; background: rgba(255,255,255,0.1); border-radius: 8px;
+    font-size: 14px; line-height: 1.4;
+  }
+  .instructions h3 { margin: 0 0 8px; font-size: 16px; }
+  .instructions ul { margin: 8px 0; padding-left: 20px; text-align: left; }
+  .instructions li { margin: 4px 0; }
+
+  /* Stats */
+  .stats {
+    margin: 16px 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  }
+  .stat-item {
+    padding: 8px; background: rgba(255,255,255,0.1); border-radius: 8px;
+    font-size: 12px;
+  }
+  .stat-value { font-weight: 800; font-size: 16px; color: var(--accent-primary); }
+
+  /* Universal text visibility enhancements */
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary) !important;
+    text-shadow: 0 1px 3px var(--shadow-subtle);
+  }
+
+  p, span, div, label {
+    color: var(--text-primary) !important;
+  }
+
+  .text-secondary {
+    color: var(--text-secondary) !important;
+    font-weight: 600;
+  }
+
+  .text-muted {
+    color: var(--text-muted) !important;
+    font-weight: 600;
+  }
+
+  /* Enhanced glass card text visibility */
+  .panel, .card, .score, .level-indicator {
+    color: var(--text-primary) !important;
+    background: var(--glass-bg-strong) !important;
+  }
+
+  .panel *, .card *, .score *, .level-indicator * {
+    color: var(--text-primary) !important;
+  }
+</style>
+</head>
+<body data-theme="dark">
+
+<!-- Go to Projects Button -->
+<a href="../projects.html" class="go-projects-btn" style="position: fixed; top: 20px; left: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.75rem 1.5rem; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 0.9rem; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); transition: all 0.3s ease; z-index: 1000; display: flex; align-items: center; gap: 0.5rem;">
+    <i class="fas fa-folder-open"></i> Projects
+</a>
+
+<button class="theme-toggle" id="themeToggle" style="position: fixed; top: 80px; left: 20px; background: var(--glass-bg); backdrop-filter: blur(var(--blur-amount)); border: 1px solid var(--glass-border); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; color: var(--text-primary); font-size: 1.2rem; z-index: 1000;">
+    <i class="fas fa-moon"></i>
+</button>
+
+<canvas id="stage"></canvas>
+
+<!-- HUD -->
+<div class="hud">
+  <div class="score" id="score">Score: 0 • Best: 0</div>
+  <div class="level-indicator" id="levelIndicator">Easy Mode</div>
+  <div class="controls">
+    <button class="btn" id="pauseBtn" title="Pause/Resume (P)">Pause</button>
+    <button class="btn" id="muteBtn" title="Mute/Unmute (M)">Mute</button>
+  </div>
+</div>
+
+<!-- Start Overlay -->
+<div class="overlay" id="startOv">
+  <div class="panel">
+    <h1>🐍 Snake Bharat 🇮🇳</h1>
+    <p>Guide your <b>tricolor snake</b> through the Indian landscape and collect <b>golden mangoes</b>!</p>
+    <div class="instructions">
+      <h3>🎮 How to Play</h3>
+      <ul>
+        <li><b>Arrow Keys/WASD</b> - Control snake direction</li>
+        <li><b>P</b> - Pause/Resume game</li>
+        <li><b>M</b> - Mute/Unmute sounds</li>
+        <li>Collect <b>mangoes</b> to grow and score!</li>
+        <li>Avoid hitting walls and yourself!</li>
+      </ul>
+    </div>
+    <div class="difficulty-buttons">
+      <button class="difficulty-btn active" data-level="easy">🟢 Easy</button>
+      <button class="difficulty-btn" data-level="medium">🟡 Medium</button>
+      <button class="difficulty-btn" data-level="hard">🔴 Hard</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat-item">
+        <div class="stat-value" id="easyBest">0</div>
+        <div>Easy Best</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="mediumBest">0</div>
+        <div>Medium Best</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="hardBest">0</div>
+        <div>Hard Best</div>
+      </div>
+    </div>
+    
+    <!-- Built With Documentation -->
+    <div class="built-with" style="margin: 16px 0; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 12px;">
+      <h4 style="margin: 0 0 8px; font-size: 14px; color: var(--accent-primary);">🛠️ Built With</h4>
+      <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+        <span style="display: flex; align-items: center; gap: 4px;">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" style="width: 16px; height: 16px;">
+          HTML5 Canvas
+        </span>
+        <span style="display: flex; align-items: center; gap: 4px;">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" style="width: 16px; height: 16px;">
+          CSS3 Variables
+        </span>
+        <span style="display: flex; align-items: center; gap: 4px;">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" style="width: 16px; height: 16px;">
+          Vanilla JS
+        </span>
+      </div>
+      <div style="margin-top: 8px; text-align: center; color: var(--text-secondary);">
+        Score: 0 • Performance Optimized • Indian Theme
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="cta" id="startBtn">🚀 Start Game</button>
+    </div>
+  </div>
+</div>
+
+<!-- Game Over Overlay -->
+<div class="overlay" id="overOv">
+  <div class="panel">
+    <h1>🎯 Game Over</h1>
+    <p id="finalLine">Score: 0</p>
+    <p id="achievementLine"></p>
+    <div class="actions">
+      <button class="cta" id="restartBtn">🔄 Restart</button>
+      <button class="cta ghost" id="menuBtn">🏠 Main Menu</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+<script>((
+) => {
+  /*** Canvas & DPI setup ***/
+  const canvas = document.getElementById('stage');
+  const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
+
+  function fit() {
+    const dpr = Math.max(1, Math.min(2.5, window.devicePixelRatio || 1));
+    const w = window.innerWidth | 0, h = window.innerHeight | 0;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    metrics.recalc(w, h);
+  }
+  window.addEventListener('resize', fit);
+
+  /*** UI elements ***/
+  const startOv = document.getElementById('startOv');
+  const overOv  = document.getElementById('overOv');
+  const startBtn = document.getElementById('startBtn');
+  const restartBtn = document.getElementById('restartBtn');
+  const menuBtn = document.getElementById('menuBtn');
+  const scoreEl = document.getElementById('score');
+  const levelIndicator = document.getElementById('levelIndicator');
+  const pauseBtn = document.getElementById('pauseBtn');
+  const muteBtn  = document.getElementById('muteBtn');
+  const finalLine = document.getElementById('finalLine');
+  const achievementLine = document.getElementById('achievementLine');
+  const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+  const easyBest = document.getElementById('easyBest');
+  const mediumBest = document.getElementById('mediumBest');
+  const hardBest = document.getElementById('hardBest');
+
+  /*** Difficulty settings ***/
+  let currentDifficulty = 'easy';
+  const difficultySettings = {
+    easy: {
+      speed: 8,
+      name: '🟢 Easy Mode'
+    },
+    medium: {
+      speed: 12,
+      name: '🟡 Medium Mode'
+    },
+    hard: {
+      speed: 16,
+      name: '🔴 Hard Mode'
+    }
+  };
+
+  /*** Metrics that scale with screen size ***/
+  const metrics = {
+    W: 0, H: 0, gridSize: 20,
+    recalc(w, h) {
+      this.W = w; this.H = h;
+      this.gridSize = Math.max(15, Math.min(25, Math.min(w, h) / 30));
+      this.cols = Math.floor(w / this.gridSize);
+      this.rows = Math.floor(h / this.gridSize);
+    }
+  };
+
+  /*** Audio (web audio beeps—no files) ***/
+  let audioCtx; let muted = false;
+  function beep({f=660, dur=90, vol=0.15, type='triangle'}) {
+    if (muted) return;
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = type; o.frequency.value = f;
+      g.gain.value = vol;
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start();
+      setTimeout(() => o.stop(), dur);
+    } catch {}
+  }
+  const sfx = {
+    eat: () => beep({f:880,dur:120,type:'triangle',vol:0.2}),
+    gameOver: () => beep({f:180,dur:300,type:'sawtooth',vol:0.25}),
+    move: () => beep({f:440,dur:50,type:'sine',vol:0.1})
+  };
+
+  /*** Game state ***/
+  let started = false;
+  let paused = false;
+  let running = false;
+  let score = 0;
+  let best = {easy: 0, medium: 0, hard: 0};
+  let snake = [];
+  let food = {};
+  let direction = { x: 1, y: 0 };
+  let nextDirection = { x: 1, y: 0 };
+  let gameSpeed = 8;
+
+  try { 
+    const saved = localStorage.getItem('snake_bharat_best');
+    if (saved) best = {...best, ...JSON.parse(saved)};
+  } catch {}
+
+  function reset() {
+    score = 0;
+    direction = { x: 1, y: 0 };
+    nextDirection = { x: 1, y: 0 };
+    gameSpeed = difficultySettings[currentDifficulty].speed;
+    
+    // Initialize snake in center
+    const centerX = Math.floor(metrics.cols / 2);
+    const centerY = Math.floor(metrics.rows / 2);
+    snake = [
+      { x: centerX, y: centerY },
+      { x: centerX - 1, y: centerY },
+      { x: centerX - 2, y: centerY }
+    ];
+    
+    spawnFood();
+    updateScoreHud();
+  }
+
+  function spawnFood() {
+    let newFood;
+    do {
+      newFood = {
+        x: Math.floor(Math.random() * metrics.cols),
+        y: Math.floor(Math.random() * metrics.rows)
+      };
+    } while (snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
+    
+    food = newFood;
+  }
+
+  function startGame() {
+    started = true; running = true; paused = false;
+    startOv.style.display = 'none';
+    overOv.style.display = 'none';
+    levelIndicator.textContent = difficultySettings[currentDifficulty].name;
+    reset();
+    lastT = 0;
+    raf = requestAnimationFrame(loop);
+  }
+
+  function gameOver() {
+    running = false;
+    sfx.gameOver();
+    
+    let achievement = '';
+    if (score > best[currentDifficulty]) { 
+      best[currentDifficulty] = score; 
+      achievement = '🎉 New Best Score!';
+      try { localStorage.setItem('snake_bharat_best', JSON.stringify(best)); } catch {} 
+    }
+    if (score >= 100) achievement += ' 🏆 Snake Master!';
+    if (snake.length >= 20) achievement += ' 🐍 Long Snake!';
+    
+    finalLine.textContent = `Score: ${score} • Length: ${snake.length} • Best: ${best[currentDifficulty]}`;
+    achievementLine.textContent = achievement;
+    overOv.style.display = 'flex';
+    updateBestScores();
+  }
+
+  function togglePause() {
+    if (!started) return;
+    paused = !paused;
+    pauseBtn.textContent = paused ? 'Resume' : 'Pause';
+    if (!paused && running) {
+      lastT = performance.now();
+      raf = requestAnimationFrame(loop);
+    }
+  }
+
+  function updateScoreHud() {
+    scoreEl.textContent = `Score: ${score} • Length: ${snake.length} • Best: ${best[currentDifficulty]}`;
+  }
+
+  function updateBestScores() {
+    easyBest.textContent = best.easy;
+    mediumBest.textContent = best.medium;
+    hardBest.textContent = best.hard;
+  }
+
+  /*** Drawing functions ***/
+  function drawBackground() {
+    // Create a subtle grid pattern
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.02)';
+    for (let x = 0; x < metrics.cols; x++) {
+      for (let y = 0; y < metrics.rows; y++) {
+        if ((x + y) % 2 === 0) {
+          ctx.fillRect(x * metrics.gridSize, y * metrics.gridSize, metrics.gridSize, metrics.gridSize);
+        }
+      }
+    }
+  }
+
+  function drawSnake() {
+    snake.forEach((segment, index) => {
+      const x = segment.x * metrics.gridSize;
+      const y = segment.y * metrics.gridSize;
+      
+      ctx.save();
+      ctx.translate(x + metrics.gridSize/2, y + metrics.gridSize/2);
+      
+      if (index === 0) {
+        // Head - tricolor pattern
+        ctx.fillStyle = '#ff9933'; // Saffron
+        ctx.fillRect(-metrics.gridSize/2, -metrics.gridSize/2, metrics.gridSize, metrics.gridSize/3);
+        ctx.fillStyle = '#ffffff'; // White
+        ctx.fillRect(-metrics.gridSize/2, -metrics.gridSize/6, metrics.gridSize, metrics.gridSize/3);
+        ctx.fillStyle = '#138808'; // Green
+        ctx.fillRect(-metrics.gridSize/2, metrics.gridSize/6, metrics.gridSize, metrics.gridSize/3);
+        
+        // Eyes
+        ctx.fillStyle = '#000000';
+        ctx.beginPath();
+        ctx.arc(-metrics.gridSize/4, -metrics.gridSize/4, 2, 0, Math.PI * 2);
+        ctx.arc(metrics.gridSize/4, -metrics.gridSize/4, 2, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        // Body - alternating tricolor segments
+        const colorIndex = index % 3;
+        ctx.fillStyle = colorIndex === 0 ? '#ff9933' : colorIndex === 1 ? '#ffffff' : '#138808';
+        ctx.fillRect(-metrics.gridSize/2, -metrics.gridSize/2, metrics.gridSize, metrics.gridSize);
+        
+        // Add border
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(-metrics.gridSize/2, -metrics.gridSize/2, metrics.gridSize, metrics.gridSize);
+      }
+      
+      ctx.restore();
+    });
+  }
+
+  function drawFood() {
+    const x = food.x * metrics.gridSize + metrics.gridSize/2;
+    const y = food.y * metrics.gridSize + metrics.gridSize/2;
+    
+    ctx.save();
+    ctx.translate(x, y);
+    
+    // Draw mango
+    ctx.fillStyle = '#FFD700';
+    ctx.beginPath();
+    ctx.ellipse(0, 0, metrics.gridSize/2.5, metrics.gridSize/2, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Mango details
+    ctx.fillStyle = '#FFA500';
+    ctx.beginPath();
+    ctx.ellipse(-2, -2, metrics.gridSize/4, metrics.gridSize/3, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Leaf
+    ctx.fillStyle = '#228B22';
+    ctx.beginPath();
+    ctx.ellipse(0, -metrics.gridSize/3, 3, 6, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.restore();
+  }
+
+  /*** Game logic ***/
+  function updateGame() {
+    // Update direction
+    direction = { ...nextDirection };
+    
+    // Move snake
+    const head = { ...snake[0] };
+    head.x += direction.x;
+    head.y += direction.y;
+    
+    // Check wall collision
+    if (head.x < 0 || head.x >= metrics.cols || head.y < 0 || head.y >= metrics.rows) {
+      return gameOver();
+    }
+    
+    // Check self collision
+    if (snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+      return gameOver();
+    }
+    
+    snake.unshift(head);
+    
+    // Check food collision
+    if (head.x === food.x && head.y === food.y) {
+      score += 10;
+      sfx.eat();
+      spawnFood();
+      updateScoreHud();
+    } else {
+      snake.pop();
+    }
+  }
+
+  /*** Input handling ***/
+  function handleInput(key) {
+    if (!running || paused) return;
+    
+    switch(key) {
+      case 'ArrowUp':
+      case 'KeyW':
+        if (direction.y !== 1) nextDirection = { x: 0, y: -1 };
+        break;
+      case 'ArrowDown':
+      case 'KeyS':
+        if (direction.y !== -1) nextDirection = { x: 0, y: 1 };
+        break;
+      case 'ArrowLeft':
+      case 'KeyA':
+        if (direction.x !== 1) nextDirection = { x: -1, y: 0 };
+        break;
+      case 'ArrowRight':
+      case 'KeyD':
+        if (direction.x !== -1) nextDirection = { x: 1, y: 0 };
+        break;
+    }
+  }
+
+  /*** Game loop ***/
+  let raf = 0, lastT = 0, gameTimer = 0;
+  function loop(t) {
+    if (!running) return;
+    if (paused) { raf = requestAnimationFrame(loop); return; }
+
+    if (!lastT) lastT = t;
+    let dt = (t - lastT) / 1000;
+    lastT = t;
+    dt = Math.min(dt, 1/30);
+
+    gameTimer += dt;
+    
+    // Update game at fixed intervals based on difficulty
+    if (gameTimer >= 1 / gameSpeed) {
+      updateGame();
+      gameTimer = 0;
+    }
+
+    // Clear and draw
+    ctx.clearRect(0, 0, metrics.W, metrics.H);
+    drawBackground();
+    drawFood();
+    drawSnake();
+
+    raf = requestAnimationFrame(loop);
+  }
+
+  /*** Event listeners ***/
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'KeyP') {
+      e.preventDefault();
+      togglePause();
+    } else if (e.code === 'KeyM') {
+      e.preventDefault();
+      muted = !muted;
+      muteBtn.textContent = muted ? 'Unmute' : 'Mute';
+    } else {
+      e.preventDefault();
+      handleInput(e.code);
+    }
+  });
+
+  startBtn.addEventListener('click', startGame);
+  restartBtn.addEventListener('click', startGame);
+  menuBtn.addEventListener('click', () => {
+    started = false;
+    running = false;
+    overOv.style.display = 'none';
+    startOv.style.display = 'flex';
+  });
+
+  pauseBtn.addEventListener('click', togglePause);
+  muteBtn.addEventListener('click', () => {
+    muted = !muted;
+    muteBtn.textContent = muted ? 'Unmute' : 'Mute';
+  });
+
+  // Difficulty selection
+  difficultyBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      difficultyBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentDifficulty = btn.dataset.level;
+    });
+  });
+
+  // Theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  themeToggle.addEventListener('click', () => {
+    const body = document.body;
+    const currentTheme = body.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    body.setAttribute('data-theme', newTheme);
+    
+    const icon = themeToggle.querySelector('i');
+    icon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    
+    localStorage.setItem('snake-theme', newTheme);
+  });
+
+  // Load saved theme
+  const savedTheme = localStorage.getItem('snake-theme') || 'dark';
+  document.body.setAttribute('data-theme', savedTheme);
+  const icon = themeToggle.querySelector('i');
+  icon.className = savedTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+
+  /*** Initialize ***/
+  fit();
+  updateBestScores();
+  startOv.style.display = 'flex';
+})();
+</script>
+
+
+</body>
+</html>

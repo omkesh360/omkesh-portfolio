@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thali Maker Game Info - Omkesh Narwade</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/styles.css">
+    <style>
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(99, 102, 241, 0.05) 0%, transparent 50%);
+            z-index: -2;
+        }
+        
+        .game-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 80px;
+            z-index: 1000;
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur-amount));
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .header-logo img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+        
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .header-nav {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .nav-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .nav-btn:hover {
+            background: var(--glass-hover);
+            border-color: var(--accent-primary);
+        }
+        
+        .main-content {
+            padding: 120px 2rem 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .info-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur-amount));
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px var(--shadow-dark);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .info-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .info-title {
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        
+        .info-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+        
+        .game-preview {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .game-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .play-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent-gradient);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            margin: 2rem auto;
+            display: block;
+            width: fit-content;
+        }
+        
+        .play-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 100px 1rem 60px;
+            }
+            
+            .info-title {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-logo img {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Background Elements -->
+    <div class="bg-gradient"></div>
+    
+    <!-- Header -->
+    <header class="game-header">
+        <div class="header-content">
+            <div class="header-logo">
+                <img src="../../assets/images/logo.png" alt="Omkesh Narwade">
+                <div class="header-title">Thali Maker Info</div>
+            </div>
+            <div class="header-nav">
+                <a href="../thali-game.html" class="nav-btn">
+                    <i class="fas fa-play"></i> Play Game
+                </a>
+                <a href="../../index.html" class="nav-btn">
+                    <i class="fas fa-home"></i> Portfolio
+                </a>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="info-card">
+            <div class="info-header">
+                <h1 class="info-title">Thali Maker Game 🍛</h1>
+                <p class="info-subtitle">Create the perfect Indian thali by placing food items correctly</p>
+            </div>
+            
+            <div class="game-preview">
+                <div class="game-icon">🍛</div>
+                <p>Experience the joy of creating traditional Indian thalis with authentic food items and cultural elements.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🍛</div>
+                    <h3 class="feature-title">Authentic Indian Food</h3>
+                    <p class="feature-desc">Features traditional Indian dishes and thali arrangements</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">Drag & Drop</h3>
+                    <p class="feature-desc">Intuitive drag and drop gameplay mechanics</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🏆</div>
+                    <h3 class="feature-title">Scoring System</h3>
+                    <p class="feature-desc">Earn points for correct placement and perfect thalis</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🎨</div>
+                    <h3 class="feature-title">Beautiful Graphics</h3>
+                    <p class="feature-desc">Colorful and appealing food illustrations</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">📱</div>
+                    <h3 class="feature-title">Touch Friendly</h3>
+                    <p class="feature-desc">Optimized for both desktop and mobile devices</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🎵</div>
+                    <h3 class="feature-title">Sound Effects</h3>
+                    <p class="feature-desc">Engaging audio feedback for actions</p>
+                </div>
+            </div>
+            
+            <div class="controls-section">
+                <h2>How to Play</h2>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">👆</div>
+                        <h3 class="feature-title">Step 1</h3>
+                        <p class="feature-desc">Click and drag food items from the selection area</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🎯</div>
+                        <h3 class="feature-title">Step 2</h3>
+                        <p class="feature-desc">Drop them in the correct spots on the thali plate</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">✨</div>
+                        <h3 class="feature-title">Step 3</h3>
+                        <p class="feature-desc">Complete the thali to earn points and advance levels</p>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="../thali-game.html" class="play-button">
+                <i class="fas fa-play"></i>
+                Start Cooking
+            </a>
+        </div>
+    </main>
+</body>
+</html>
